@@ -565,6 +565,55 @@ async def dooya_action(var, config, args):
     template_ = await cg.templatable(config[CONF_CHECK], args, cg.uint8)
     cg.add(var.set_check(template_))
 
+# Aok
+AokData, AokBinarySensor, AokTrigger, AokAction, AokDumper = declare_protocol(
+    "Aok"
+)
+AOK_SCHEMA = cv.Schema(
+    {
+        cv.Required(CONF_ID): cv.hex_int_range(0, 16777215),
+        cv.Required(CONF_CHANNEL): cv.hex_int_range(0, 255),
+        cv.Required(CONF_BUTTON): cv.hex_int_range(0, 15),
+        cv.Required(CONF_CHECK): cv.hex_int_range(0, 15),
+    }
+)
+
+
+@register_binary_sensor("aok", AokBinarySensor, AOK_SCHEMA)
+def aok_binary_sensor(var, config):
+    cg.add(
+        var.set_data(
+            cg.StructInitializer(
+                AokData,
+                ("id", config[CONF_ID]),
+                ("channel", config[CONF_CHANNEL]),
+                ("button", config[CONF_BUTTON]),
+                ("check", config[CONF_CHECK]),
+            )
+        )
+    )
+
+
+@register_trigger("aok", AokTrigger, AokData)
+def aok_trigger(var, config):
+    pass
+
+
+@register_dumper("aok", AokDumper)
+def aok_dumper(var, config):
+    pass
+
+
+@register_action("aok", AokAction, AOK_SCHEMA)
+async def aok_action(var, config, args):
+    template_ = await cg.templatable(config[CONF_ID], args, cg.uint32)
+    cg.add(var.set_id(template_))
+    template_ = await cg.templatable(config[CONF_CHANNEL], args, cg.uint16)
+    cg.add(var.set_channel(template_))
+    template_ = await cg.templatable(config[CONF_BUTTON], args, cg.uint8)
+    cg.add(var.set_button(template_))
+    template_ = await cg.templatable(config[CONF_CHECK], args, cg.uint8)
+    cg.add(var.set_check(template_))
 
 # JVC
 JVCData, JVCBinarySensor, JVCTrigger, JVCAction, JVCDumper = declare_protocol("JVC")
