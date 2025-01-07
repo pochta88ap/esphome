@@ -38,6 +38,11 @@ on_dooya:
     - logger.log:
         format: "on_dooya: %u %u %u"
         args: ["x.channel", "x.button", "x.check"]
+on_aok:
+  then:
+    - logger.log:
+        format: "on_aok: %u %u %u"
+        args: ["x.channel", "x.button", "x.check"]
 on_drayton:
   then:
     - logger.log:
