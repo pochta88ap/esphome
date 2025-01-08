@@ -6,16 +6,16 @@ namespace remote_base {
 
 static const char *const TAG = "remote.aok";
 
-static const uint32_t PREAMBLE_HIGH_US = 450;
-static const uint32_t PREAMBLE_LOW_US = 450;
-static const uint32_t HEADER_LONG_US = 5000;
-static const uint32_t HEADER_SHORT_US = 600;
+static const uint32_t PREAMBLE_HIGH_US = 700;
+static const uint32_t PREAMBLE_LOW_US = 200;
+static const uint32_t HEADER_LONG_US = 5100;
+static const uint32_t HEADER_SHORT_US = 500;
 static const uint32_t HEADER_HIGH_US = 5000;
 static const uint32_t HEADER_LOW_US = 1500;
-static const uint32_t BIT_ZERO_HIGH_US = 200;
-static const uint32_t BIT_ZERO_LOW_US = 700;
-static const uint32_t BIT_ONE_HIGH_US = 500;
-static const uint32_t BIT_ONE_LOW_US = 400;
+static const uint32_t BIT_ZERO_HIGH_US = 400;
+static const uint32_t BIT_ZERO_LOW_US = 500;
+static const uint32_t BIT_ONE_HIGH_US = 700;
+static const uint32_t BIT_ONE_LOW_US = 170;
 
 void AokProtocol::encode(RemoteTransmitData *dst, const AokData &data) {
   dst->set_carrier_frequency(0);
@@ -67,9 +67,10 @@ optional<AokData> AokProtocol::decode(RemoteReceiveData src) {
       return{};
     }
   }
-  if (!src.expect_item(HEADER_HIGH_US, HEADER_LOW_US))
+   ESP_LOGI(TAG, "Received aok preamble");
+  if (!src.expect_item(HEADER_LONG_US, HEADER_SHORT_US))
     return {};
-
+ESP_LOGI(TAG, "Received aok header");
   for (uint8_t i = 0; i < 32; i++) {
     if (src.expect_item(BIT_ONE_HIGH_US, BIT_ONE_LOW_US)) {
       out.id = (out.id << 1) | 1;
