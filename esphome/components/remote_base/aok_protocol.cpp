@@ -6,6 +6,10 @@ namespace remote_base {
 
 static const char *const TAG = "remote.aok";
 
+static const uint32_t PREAMBLE_HIGH_US = 450;
+static const uint32_t PREAMBLE_LOW_US = 450;
+static const uint32_t HEADER_LONG_US = 5000;
+static const uint32_t HEADER_SHORT_US = 600;
 static const uint32_t HEADER_HIGH_US = 5000;
 static const uint32_t HEADER_LOW_US = 1500;
 static const uint32_t BIT_ZERO_HIGH_US = 200;
@@ -58,10 +62,15 @@ optional<AokData> AokProtocol::decode(RemoteReceiveData src) {
       .button = 0,
       .check = 0,
   };
+  for (uint8_t i = 0; i < 7; i++) {
+    if (!src.expect_item(PREAMBLE_HIGH_US, PREAMBLE_LOW_US)) {
+      return{};
+    }
+  }
   if (!src.expect_item(HEADER_HIGH_US, HEADER_LOW_US))
     return {};
 
-  for (uint8_t i = 0; i < 24; i++) {
+  for (uint8_t i = 0; i < 32; i++) {
     if (src.expect_item(BIT_ONE_HIGH_US, BIT_ONE_LOW_US)) {
       out.id = (out.id << 1) | 1;
     } else if (src.expect_item(BIT_ZERO_HIGH_US, BIT_ZERO_LOW_US)) {
@@ -71,7 +80,7 @@ optional<AokData> AokProtocol::decode(RemoteReceiveData src) {
     }
   }
 
-  for (uint8_t i = 0; i < 8; i++) {
+  for (uint8_t i = 0; i < 16; i++) {
     if (src.expect_item(BIT_ONE_HIGH_US, BIT_ONE_LOW_US)) {
       out.channel = (out.channel << 1) | 1;
     } else if (src.expect_item(BIT_ZERO_HIGH_US, BIT_ZERO_LOW_US)) {
@@ -81,7 +90,7 @@ optional<AokData> AokProtocol::decode(RemoteReceiveData src) {
     }
   }
 
-  for (uint8_t i = 0; i < 4; i++) {
+  for (uint8_t i = 0; i < 8; i++) {
     if (src.expect_item(BIT_ONE_HIGH_US, BIT_ONE_LOW_US)) {
       out.button = (out.button << 1) | 1;
     } else if (src.expect_item(BIT_ZERO_HIGH_US, BIT_ZERO_LOW_US)) {
@@ -91,7 +100,7 @@ optional<AokData> AokProtocol::decode(RemoteReceiveData src) {
     }
   }
 
-  for (uint8_t i = 0; i < 3; i++) {
+  for (uint8_t i = 0; i < 8; i++) {
     if (src.expect_item(BIT_ONE_HIGH_US, BIT_ONE_LOW_US)) {
       out.check = (out.check << 1) | 1;
     } else if (src.expect_item(BIT_ZERO_HIGH_US, BIT_ZERO_LOW_US)) {
