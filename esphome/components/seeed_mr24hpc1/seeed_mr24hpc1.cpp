@@ -63,16 +63,21 @@ void MR24HPC1Component::dump_config() {
 void MR24HPC1Component::setup() {
   ESP_LOGCONFIG(TAG, "Setting up MR24HPC1...");
   this->check_uart_settings(115200);
-
+#ifdef USE_NUMBER
   if (this->custom_mode_number_ != nullptr) {
     this->custom_mode_number_->publish_state(0);  // Zero out the custom mode
   }
+#endif
+#ifdef USE_SENSOR
   if (this->custom_mode_num_sensor_ != nullptr) {
     this->custom_mode_num_sensor_->publish_state(0);
   }
+#endif
+#ifdef USE_TEXT_SENSOR
   if (this->custom_mode_end_text_sensor_ != nullptr) {
     this->custom_mode_end_text_sensor_->publish_state("Not in custom mode");
   }
+  #endif
   this->set_custom_end_mode();
   this->poll_time_base_func_check_ = true;
   this->check_dev_inf_sign_ = true;
