@@ -64,6 +64,7 @@ void MR24HPC1Component::setup() {
   ESP_LOGCONFIG(TAG, "Setting up MR24HPC1...");
   this->check_uart_settings(115200);
 #ifdef USE_NUMBER
+
   if (this->custom_mode_number_ != nullptr) {
     this->custom_mode_number_->publish_state(0);  // Zero out the custom mode
   }
