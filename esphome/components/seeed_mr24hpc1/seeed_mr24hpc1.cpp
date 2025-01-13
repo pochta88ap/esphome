@@ -410,6 +410,8 @@ void MR24HPC1Component::r24_frame_parse_open_underlying_information_(uint8_t *da
       this->s_output_info_switch_flag_ = OUTPUT_SWTICH_OFF;
     }
   } else if (data[FRAME_COMMAND_WORD_INDEX] == 0x01) {
+
+  #ifdef USE_SENSOR
     if (this->custom_spatial_static_value_sensor_ != nullptr) {
       this->custom_spatial_static_value_sensor_->publish_state(data[FRAME_DATA_INDEX]);
     }
@@ -425,6 +427,7 @@ void MR24HPC1Component::r24_frame_parse_open_underlying_information_(uint8_t *da
     if (this->custom_motion_speed_sensor_ != nullptr) {
       this->custom_motion_speed_sensor_->publish_state((data[FRAME_DATA_INDEX + 4] - 10) * 0.5f);
     }
+  #endif
   } else if ((data[FRAME_COMMAND_WORD_INDEX] == 0x06) || (data[FRAME_COMMAND_WORD_INDEX] == 0x86)) {
     // none:0x00  close_to:0x01  far_away:0x02
     if ((this->keep_away_text_sensor_ != nullptr) && (data[FRAME_DATA_INDEX] < 3)) {
@@ -433,13 +436,17 @@ void MR24HPC1Component::r24_frame_parse_open_underlying_information_(uint8_t *da
   } else if ((this->movement_signs_sensor_ != nullptr) &&
              ((data[FRAME_COMMAND_WORD_INDEX] == 0x07) || (data[FRAME_COMMAND_WORD_INDEX] == 0x87))) {
     this->movement_signs_sensor_->publish_state(data[FRAME_DATA_INDEX]);
-  } else if ((this->existence_threshold_number_ != nullptr) &&
+  }
+ #ifdef USE_NUMBER 
+   else if ((this->existence_threshold_number_ != nullptr) &&
              ((data[FRAME_COMMAND_WORD_INDEX] == 0x08) || (data[FRAME_COMMAND_WORD_INDEX] == 0x88))) {
     this->existence_threshold_number_->publish_state(data[FRAME_DATA_INDEX]);
   } else if ((this->motion_threshold_number_ != nullptr) &&
              ((data[FRAME_COMMAND_WORD_INDEX] == 0x09) || (data[FRAME_COMMAND_WORD_INDEX] == 0x89))) {
     this->motion_threshold_number_->publish_state(data[FRAME_DATA_INDEX]);
-  } else if ((this->existence_boundary_select_ != nullptr) &&
+  } 
+#endif
+  else if ((this->existence_boundary_select_ != nullptr) &&
              ((data[FRAME_COMMAND_WORD_INDEX] == 0x0a) || (data[FRAME_COMMAND_WORD_INDEX] == 0x8a))) {
     if (this->existence_boundary_select_->has_index(data[FRAME_DATA_INDEX] - 1)) {
       this->existence_boundary_select_->publish_state(S_BOUNDARY_STR[data[FRAME_DATA_INDEX] - 1]);
