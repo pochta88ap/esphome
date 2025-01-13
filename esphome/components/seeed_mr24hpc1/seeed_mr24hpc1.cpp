@@ -456,7 +456,9 @@ void MR24HPC1Component::r24_frame_parse_open_underlying_information_(uint8_t *da
     if (this->motion_boundary_select_->has_index(data[FRAME_DATA_INDEX] - 1)) {
       this->motion_boundary_select_->publish_state(S_BOUNDARY_STR[data[FRAME_DATA_INDEX] - 1]);
     }
-  } else if ((this->motion_trigger_number_ != nullptr) &&
+  }
+#ifdef USE_NUMBER  
+   else if ((this->motion_trigger_number_ != nullptr) &&
              ((data[FRAME_COMMAND_WORD_INDEX] == 0x0c) || (data[FRAME_COMMAND_WORD_INDEX] == 0x8c))) {
     uint32_t motion_trigger_time = encode_uint32(data[FRAME_DATA_INDEX], data[FRAME_DATA_INDEX + 1],
                                                  data[FRAME_DATA_INDEX + 2], data[FRAME_DATA_INDEX + 3]);
@@ -472,7 +474,9 @@ void MR24HPC1Component::r24_frame_parse_open_underlying_information_(uint8_t *da
                                                  data[FRAME_DATA_INDEX + 2], data[FRAME_DATA_INDEX + 3]);
     float custom_unmanned_time = enter_unmanned_time / 1000.0;
     this->custom_unman_time_number_->publish_state(custom_unmanned_time);
-  } else if (data[FRAME_COMMAND_WORD_INDEX] == 0x80) {
+  } 
+  #endif
+  else if (data[FRAME_COMMAND_WORD_INDEX] == 0x80) {
     if (data[FRAME_DATA_INDEX]) {
       this->s_output_info_switch_flag_ = OUTPUT_SWITCH_ON;
     } else {
