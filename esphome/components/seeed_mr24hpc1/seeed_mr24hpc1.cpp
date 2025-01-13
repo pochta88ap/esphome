@@ -537,18 +537,24 @@ void MR24HPC1Component::r24_frame_parse_work_status_(uint8_t *data) {
     } else {
       ESP_LOGD(TAG, "Select has index offset %d Error", data[FRAME_DATA_INDEX]);
     }
-  } else if ((this->sensitivity_number_ != nullptr) &&
+  }
+#ifdef USE_NUMBER  
+   else if ((this->sensitivity_number_ != nullptr) &&
              ((data[FRAME_COMMAND_WORD_INDEX] == 0x08) || (data[FRAME_COMMAND_WORD_INDEX] == 0x88))) {
     // 1-3
     this->sensitivity_number_->publish_state(data[FRAME_DATA_INDEX]);
-  } else if (data[FRAME_COMMAND_WORD_INDEX] == 0x09) {
+  }
+#endif 
+  else if (data[FRAME_COMMAND_WORD_INDEX] == 0x09) {
     // 1-4
     if (this->custom_mode_num_sensor_ != nullptr) {
       this->custom_mode_num_sensor_->publish_state(data[FRAME_DATA_INDEX]);
     }
+#ifdef USB_NUMBER
     if (this->custom_mode_number_ != nullptr) {
       this->custom_mode_number_->publish_state(0);
     }
+#endif
     if (this->custom_mode_end_text_sensor_ != nullptr) {
       this->custom_mode_end_text_sensor_->publish_state("Setup in progress...");
     }
@@ -567,9 +573,11 @@ void MR24HPC1Component::r24_frame_parse_work_status_(uint8_t *data) {
       if (this->custom_mode_end_text_sensor_ != nullptr) {
         this->custom_mode_end_text_sensor_->publish_state("Not in custom mode");
       }
+  #ifdef USB_NUMBER
       if (this->custom_mode_number_ != nullptr) {
         this->custom_mode_number_->publish_state(0);
       }
+  #endif
       if (this->custom_mode_num_sensor_ != nullptr) {
         this->custom_mode_num_sensor_->publish_state(data[FRAME_DATA_INDEX]);
       }
