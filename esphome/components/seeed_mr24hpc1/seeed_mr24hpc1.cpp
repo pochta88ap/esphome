@@ -749,9 +749,11 @@ void MR24HPC1Component::set_scene_mode(uint8_t value) {
   uint8_t send_data[10] = {0x53, 0x59, 0x05, 0x07, 0x00, 0x01, value, 0x00, 0x54, 0x43};
   send_data[7] = get_frame_crc_sum(send_data, send_data_len);
   this->send_query_(send_data, send_data_len);
+#ifdef USB_NUMBER
   if (this->custom_mode_number_ != nullptr) {
     this->custom_mode_number_->publish_state(0);
   }
+#endif
   if (this->custom_mode_num_sensor_ != nullptr) {
     this->custom_mode_num_sensor_->publish_state(0);
   }
@@ -794,9 +796,11 @@ void MR24HPC1Component::set_unman_time(uint8_t value) {
 void MR24HPC1Component::set_custom_mode(uint8_t mode) {
   if (mode == 0) {
     this->set_custom_end_mode();  // Equivalent to end setting
+  #ifdef USE_NUMBER
     if (this->custom_mode_number_ != nullptr) {
       this->custom_mode_number_->publish_state(0);
     }
+  #endif
     return;
   }
   uint8_t send_data_len = 10;
