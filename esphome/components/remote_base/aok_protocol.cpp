@@ -6,15 +6,15 @@ namespace remote_base {
 
 static const char *const TAG = "remote.aok";
 
-static const uint32_t PREAMBLE_HIGH_US = 700;
-static const uint32_t PREAMBLE_LOW_US = 200;
-static const uint32_t HEADER_LONG_US = 5100;
+static const uint32_t PREAMBLE_HIGH_US = 460;
+static const uint32_t PREAMBLE_LOW_US = 440;
+static const uint32_t HEADER_LONG_US = 5200;
 static const uint32_t HEADER_SHORT_US = 500;
 static const uint32_t HEADER_HIGH_US = 5000;
 static const uint32_t HEADER_LOW_US = 1500;
 static const uint32_t BIT_ZERO_HIGH_US = 400;
 static const uint32_t BIT_ZERO_LOW_US = 500;
-static const uint32_t BIT_ONE_HIGH_US = 700;
+static const uint32_t BIT_ONE_HIGH_US = 730;
 static const uint32_t BIT_ONE_LOW_US = 170;
 
 void AokProtocol::encode(RemoteTransmitData *dst, const AokData &data) {
