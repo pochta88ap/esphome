@@ -1,4 +1,4 @@
-5#include "aok_protocol.h"
+#include "aok_protocol.h"
 #include "esphome/core/log.h"
 
 namespace esphome {
