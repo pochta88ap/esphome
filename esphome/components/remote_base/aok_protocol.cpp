@@ -63,7 +63,7 @@ optional<AokData> AokProtocol::decode(RemoteReceiveData src) {
       .check = 0,
   };
   
-  for (uint8_t i = 0; i < 5; i++) {
+  for (uint8_t i = 0; i < 3; i++) {
     if (!src.expect_item(PREAMBLE_HIGH_US, PREAMBLE_LOW_US)) {
       return{};
     }
