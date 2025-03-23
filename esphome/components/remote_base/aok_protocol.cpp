@@ -62,7 +62,7 @@ optional<AokData> AokProtocol::decode(RemoteReceiveData src) {
       .button = 0,
       .check = 0,
   };
-  ESP_LOGI(TAG, "Startaok preamble");
+  
   for (uint8_t i = 0; i < 5; i++) {
     if (!src.expect_item(PREAMBLE_HIGH_US, PREAMBLE_LOW_US)) {
       return{};
