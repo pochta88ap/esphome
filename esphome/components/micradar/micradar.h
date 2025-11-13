@@ -32,13 +32,19 @@
 namespace esphome {
 namespace micradar {
 
-
+class MicradarComponent : public Component, public uart::UARTDevice {
 static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buffer
  public:
   void setup() override;
   void dump_config() override;
   void loop() override;
+ protected:
+  void readline_(int readch);
+
+  uint8_t buffer_pos_ = 0;  // where to resume processing/populating buffer
+  uint8_t buffer_data_[MAX_LINE_LENGTH];
 
 
+}
 }
 }
