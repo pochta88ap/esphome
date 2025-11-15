@@ -129,7 +129,7 @@ namespace micradar {
         for (i=0; i< len ; i++ ){
             sum+= buf[i];
         }
-        return (uint8_t) 0xff && sum; 
+        return (uint8_t) 0xff & sum; 
     }
 }
 
