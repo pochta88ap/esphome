@@ -116,11 +116,20 @@ namespace micradar {
             return;  // Not enough data to process yet
         }
         if (micradar::validate_header_footer(DATA_FRAME_TAIL, &this->buffer_data_[this->buffer_pos_ - HEADER_TAIL_SIZE])) {
-             ESP_LOGV(TAG, "Handling Data: %s", format_hex_pretty(this->buffer_data_, this->buffer_pos_).c_str());
+            uint8_t sum = checkDigit(this->buffer_data_, this->buffer_pos_- HEADER_TAIL_SIZE );
+             ESP_LOGV(TAG, "Handling Data: %s sum: %d ", format_hex_pretty(this->buffer_data_, this->buffer_pos_).c_str(), sum);
             //this->handle_periodic_data_();
             this->buffer_pos_ = 0;  // Reset position index for next message
         }
 
+    }
+    uint8_t MicradarComponent::checkDigit_( uint8_t *buf, uint8_t len ){
+        uint8_t i;
+        uint16_t sum(0);
+        for (i=0 i< len ; i++ ){
+            sum+= buf[i];
+        }
+        return (uint8_t) 0xff && sum; 
     }
 }
 
