@@ -117,6 +117,11 @@ namespace micradar {
         }
         if (micradar::validate_header_footer(DATA_FRAME_TAIL, &this->buffer_data_[this->buffer_pos_ - HEADER_TAIL_SIZE])) {
             uint8_t sum = checkDigit_(this->buffer_data_, this->buffer_pos_- HEADER_TAIL_SIZE - 1 );
+            if( sum != this->buffer_data_[this->buffer_pos_ - HEADER_TAIL_SIZE -1 ] ){
+                ESP_LOGW(TAG, "error receiving data block; ignoring");
+                this->buffer_pos_= 0;
+                return;
+            }
              ESP_LOGV(TAG, "Handling Data: %s sum: %d ", format_hex_pretty(this->buffer_data_, this->buffer_pos_).c_str(), sum);
             //this->handle_periodic_data_();
             this->buffer_pos_ = 0;  // Reset position index for next message
