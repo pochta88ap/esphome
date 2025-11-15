@@ -92,11 +92,6 @@ namespace micradar {
 
     }
 
-    void MicradarComponent::dump_config() {
-
-    }
-
-
     void MicradarComponent::loop() {
         while (this->available()) {
             this->readline_(this->read());
