@@ -75,8 +75,8 @@ namespace micradar {
 
     static constexpr uint8_t HEADER_TAIL_SIZE = 2;
 
-    static constexpr DATA_FRAME_HEADER[HEADER_TAIL_SIZE] = { 0x53, 0x59 };
-    static constexpr DATA_FRAME_TAIL[HEADER_TAIL_SIZE] = { 0x54, 0x43 };
+    static constexpr uint8_t DATA_FRAME_HEADER[HEADER_TAIL_SIZE] = { 0x53, 0x59 };
+    static constexpr uint8_t DATA_FRAME_TAIL[HEADER_TAIL_SIZE] = { 0x54, 0x43 };
 
     static inline int two_byte_to_int(char firstbyte, char secondbyte) { return (int16_t) (secondbyte << 8) + firstbyte; }
 
