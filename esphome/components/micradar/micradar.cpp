@@ -99,7 +99,7 @@ namespace micradar {
     }
 
 
-    void LD2410Component::loop() {
+    void MicradarComponent::loop() {
         while (this->available()) {
             this->readline_(this->read());
     }
