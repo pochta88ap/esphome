@@ -7,6 +7,8 @@
 namespace esphome {
 namespace micradar {
 
+    static const char *const TAG = "micradar";
+
     // Contfol words
     static constexpr uint8_t CTRL_SYSTEM_FUNCTIONS = 0x01;
     static constexpr uint8_t CTRL_PRODUCT_INFO = 0x02;
@@ -97,7 +99,7 @@ namespace micradar {
             this->readline_(this->read());
         }
     }
-    
+
     void MicradarComponent::readline_(int readch ) {
         if (readch < 0) {
             return;  // No data available
@@ -121,5 +123,4 @@ namespace micradar {
 
 
 
-}
 }
