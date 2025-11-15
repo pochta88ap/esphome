@@ -95,8 +95,9 @@ namespace micradar {
     void MicradarComponent::loop() {
         while (this->available()) {
             this->readline_(this->read());
+        }
     }
-
+    
     void MicradarComponent::readline_(int readch ) {
         if (readch < 0) {
             return;  // No data available
