@@ -45,6 +45,6 @@ static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buf
   uint8_t buffer_data_[MAX_LINE_LENGTH];
 
 
-}
+};
 }
 }

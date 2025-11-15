@@ -73,8 +73,6 @@ namespace micradar {
     };
 
 
-    constexpr Uint8ToString 
-
     static constexpr uint8_t HEADER_TAIL_SIZE = 2;
 
     static constexpr DATA_FRAME_HEADER[HEADER_TAIL_SIZE] = { 0x53, 0x59 };
