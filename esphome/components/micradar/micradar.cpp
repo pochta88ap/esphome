@@ -115,7 +115,11 @@ namespace micradar {
         if (this->buffer_pos_ < HEADER_TAIL_SIZE) {
             return;  // Not enough data to process yet
         }
-
+        if (ld2410::validate_header_footer(DATA_FRAME_FOOTER, &this->buffer_data_[this->buffer_pos_ - HEADER_TAIL_SIZE])) {
+             ESP_LOGV(TAG, "Handling Data: %s", format_hex_pretty(this->buffer_data_, this->buffer_pos_).c_str());
+            //this->handle_periodic_data_();
+            this->buffer_pos_ = 0;  // Reset position index for next message
+        }
 
     }
 }
