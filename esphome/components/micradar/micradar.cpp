@@ -185,7 +185,7 @@ namespace micradar {
         
     }
     void MicradarComponent::issue_heartbit_package_(){
-        uint8_t buff = 0;
+        uint8_t buf = 0;
         this->issue_data_( CTRL_SYSTEM_FUNCTIONS, CMD_HEARTBIT_PACKAGE, &buf, sizeof( buf) );
     }
     void MicradarComponent::issue_module_reset_(){
