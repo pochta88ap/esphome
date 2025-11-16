@@ -98,9 +98,16 @@ namespace micradar {
     
     }
 
-    void MicradarComponent::setup() {
+    void MicradarComponent::setup() { read_all_info() }
 
+    void MicradarComponent::read_all_info(){
+        issue_product_model_query_();
+        issue_product_id_query_();
+        issue_hardware_model_query_();
+        issue_firmware_version_query_();
+        issue_body_movement_parameter_query_();
     }
+
 
     void MicradarComponent::loop() {
         while (this->available()) {
