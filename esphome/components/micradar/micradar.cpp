@@ -39,7 +39,7 @@ namespace micradar {
     static constexpr uint8_t CMD_UPLOAD_OF_RADAR_FAILURE = 0x02;
     static constexpr uint8_t CMD_INITIALIZATION_PROGRESS_QUERY = 0x81;
     // Human presence function
-    static constexpr uint8_t CMD_ENABLE_DISABLE_HUMAN = 0x00;
+    static constexpr uint8_t CMD_ENABLE_DISABLE_HUMAN_PRESENCE_FUNCTION = 0x00;
     static constexpr uint8_t CMD_HUMAN_PRESENCE_INFORMATION_REPORT = 0x01;
     static constexpr uint8_t CMD_MOVEMENT_INFORMATION_REPORT = 0x02;
     static constexpr uint8_t CMD_BODY_MOVEMENT_PARAMETER_REPORT = 0x03;
@@ -188,50 +188,71 @@ namespace micradar {
         uint8_t buf = 0;
         this->issue_data_( CTRL_SYSTEM_FUNCTIONS, CMD_HEARTBIT_PACKAGE, &buf, sizeof( buf) );
     }
+
     void MicradarComponent::issue_module_reset_(){
-
+        uint8_t buf = 0;
+        this->issue_data_( CTRL_SYSTEM_FUNCTIONS, CMD_MODULE_RESET, &buf, sizeof( buf) );
     }
+
     void MicradarComponent::issue_product_model_query_(){
-
+        uint8_t buf = 0;
+        this->issue_data_( CTRL_PRODUCT_INFO, CMD_PRODUCT_MODEL_QUERY, &buf, sizeof( buf) );
     }
+
     void MicradarComponent::issue_product_id_query_(){
-
+        uint8_t buf = 0;
+        this->issue_data_( CTRL_PRODUCT_INFO, CMD_PRODUCT_ID_QUERY, &buf, sizeof( buf) );
     }
+    
     void MicradarComponent::issue_hardware_model_query_(){
-
+         uint8_t buf = 0;
+        this->issue_data_( CTRL_PRODUCT_INFO, CMD_HARDWARE_MODEL_QUERY, &buf, sizeof( buf) );
     }
+
     void MicradarComponent::issue_firmware_version_query_(){
-
+         uint8_t buf = 0;
+        this->issue_data_( CTRL_PRODUCT_INFO, CMD_FIRMWARE_INFO_QUERY, &buf, sizeof( buf) );
     }
+
     void MicradarComponent::issue_initialization_progress_query_(){
-
+        uint8_t buf = 0;
+        this->issue_data_( CTRL_WORKING_STATUS, CMD_INITIALIZATION_PROGRESS_QUERY, &buf, sizeof( buf) );
     }
+
     void MicradarComponent::issue_enable_human_presence_function_( uint8_t value ){
-
+        
+        this->issue_data_( CTRL_HUMAN_PRESENCE_FUNCTION, CMD_ENABLE_DISABLE_HUMAN_PRESENCE_FUNCTION, &value, sizeof( value ) );
     }
+
     void MicradarComponent::issue_human_presence_switch_query_(){
-
+        uint8_t buf = 0;
+        this->issue_data_( CTRL_HUMAN_PRESENCE_FUNCTION, CMD_HUMAN_PRESENCE_SWITCH_QUERY, &buf, sizeof( buf) );
     }
-    void MicradarComponent::issue_presence_information_query_(){
 
+    void MicradarComponent::issue_presence_information_query_(){
+        uint8_t buf = 0;
+        this->issue_data_( CTRL_HUMAN_PRESENCE_FUNCTION, CMD_HUMAN_PRESENCE_INFORMATION_QUERY, &buf, sizeof( buf) );
     }
     void MicradarComponent::issue_movement_information_query_(){
-
+        uint8_t buf = 0;
+        this->issue_data_( CTRL_HUMAN_PRESENCE_FUNCTION, CMD_MOVEMENT_INFORMATION_QUERY, &buf, sizeof( buf) );
     }
     void MicradarComponent::issue_body_movement_parameter_query_(){
-
+        uint8_t buf = 0;
+        this->issue_data_( CTRL_HUMAN_PRESENCE_FUNCTION, CMD_BODY_MOVEMENT_PARAMETER_QUERY, &buf, sizeof( buf) );
     }
     void MicradarComponent::issue_track_information_query_(){
-
+        uint8_t buf = 0;
+        this->issue_data_( CTRL_TRACK_FUNCTION, CMD_TRACK_INFORMATION_QUERY, &buf, sizeof( buf) );
     }
-    void MicradarComponent::issue_start_OTA_upgrade_( uint8_t firmware_package_size ){
-
+    void MicradarComponent::issue_start_OTA_upgrade_( uint32_t firmware_package_size ){
+        this->issue_data_( CTRL_OTA, CMD_START_OTA_UPGRADE, &firmware_package_size, sizeof( firmware_package_size ) );
     }
     void MicradarComponent::issue_upgrade_package_transmission_( uint8_t *packet, uint32_t len ){
-
+        this->issue_data_( CTRL_OTA, CMD_UPGRADE_PACKAGE_TRANSMISSION, packet, len );
     }
     void MicradarComponent::issue_stop_OTA_upgrade_( uint8_t value ){
-
+        this->issue_data_( CTRL_OTA, CMD_stop_ota_upgrade, &value, sizeof( value) );
     }
 }
 
