@@ -224,7 +224,7 @@ namespace micradar {
     void MicradarComponent::issue_track_information_query_(){
 
     }
-    void MicradarComponent::issue_start_OTA_upgrade_( uint38_t firmware_package_size ){
+    void MicradarComponent::issue_start_OTA_upgrade_( uint8_t firmware_package_size ){
 
     }
     void MicradarComponent::issue_upgrade_package_transmission_( uint8_t *packet, uint32_t len ){
