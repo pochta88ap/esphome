@@ -37,7 +37,7 @@ static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buf
 
 
 #ifdef USE_BUTTON
-  SUB_BUTTON(factory_reset)
+  
   SUB_BUTTON(query)
   SUB_BUTTON(restart)
 #endif
