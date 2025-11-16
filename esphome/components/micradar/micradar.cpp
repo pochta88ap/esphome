@@ -133,7 +133,7 @@ namespace micradar {
         }
 
     }
-    uint8_t MicradarComponent::checkDigit_( uint8_t *buf, uint8_t len ){
+    uint8_t MicradarComponent::checkDigit_( uint8_t *buf, uint16_t len ){
         uint8_t i;
         uint16_t sum(0);
         for (i=0; i< len ; i++ ){
