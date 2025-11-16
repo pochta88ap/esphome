@@ -62,7 +62,7 @@ static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buf
   void issue_movement_information_query_();
   void issue_body_movement_parameter_query_();
   void issue_track_information_query_();
-  void issue_start_OTA_upgrade_( uint38_t firmware_package_size );
+  void issue_start_OTA_upgrade_( uint8_t firmware_package_size );
   void issue_upgrade_package_transmission_( uint8_t *packet, uint32_t len );
   void issue_stop_OTA_upgrade_( uint8_t value );
 
