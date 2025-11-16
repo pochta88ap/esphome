@@ -122,7 +122,7 @@ namespace micradar {
     }
 
     void MicradarComponent::restart_and_read_all_info(){
-        this->vissue_module_reset_();
+        this->issue_module_reset_();
         this->read_all_info();
     }
 
