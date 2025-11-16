@@ -14,7 +14,7 @@ from esphome.const import (
 from .. import CONF_MICRADAR_ID, MicradarComponent, micradar_ns
 
 QueryButton = micradar_ns.class_("QueryButton", button.Button)
-RestartButton = micradar.class_("RestartButton", button.Button)
+RestartButton = micradar_ns.class_("RestartButton", button.Button)
 
 CONF_QUERY_PARAMS = "query_params"
 
