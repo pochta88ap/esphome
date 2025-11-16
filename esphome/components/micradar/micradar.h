@@ -46,8 +46,7 @@ static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buf
   void setup() override;
   void dump_config() override;
   void loop() override;
-private:
-  void read_all_info();
+
  protected:
   void readline_(int readch);
 
