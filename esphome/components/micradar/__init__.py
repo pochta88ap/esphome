@@ -3,7 +3,7 @@ from esphome.automation import maybe_simple_id
 import esphome.codegen as cg
 from esphome.components import uart
 import esphome.config_validation as cv
-from esphome.const import CONF_ID,
+from esphome.const import CONF_ID
 
 DEPENDENCIES = ["uart"]
 CODEOWNERS = ["@pochta88.ap"]
