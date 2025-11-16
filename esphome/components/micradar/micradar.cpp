@@ -111,19 +111,19 @@ namespace micradar {
 
     }
 
-    void MicradarComponent::setup() { read_all_info(); }
+    void MicradarComponent::setup() { this->read_all_info(); }
 
     void MicradarComponent::read_all_info(){
-        issue_product_model_query_();
-        issue_product_id_query_();
-        issue_hardware_model_query_();
-        issue_firmware_version_query_();
-        issue_body_movement_parameter_query_();
+        this->issue_product_model_query_();
+        this->issue_product_id_query_();
+        this->issue_hardware_model_query_();
+        this->issue_firmware_version_query_();
+        this->issue_body_movement_parameter_query_();
     }
 
     void MicradarComponent::restart_and_read_all_info(){
-        issue_module_reset_();
-        read_all_info();
+        this->vissue_module_reset_();
+        this->read_all_info();
     }
 
 
@@ -149,7 +149,7 @@ namespace micradar {
             return;  // Not enough data to process yet
         }
         if (micradar::validate_header_footer(DATA_FRAME_TAIL, &this->buffer_data_[this->buffer_pos_ - HEADER_TAIL_SIZE])) {
-            uint8_t sum = checkDigit_(this->buffer_data_, this->buffer_pos_- HEADER_TAIL_SIZE - 1 );
+            uint8_t sum = this->checkDigit_(this->buffer_data_, this->buffer_pos_- HEADER_TAIL_SIZE - 1 );
             if( sum != this->buffer_data_[this->buffer_pos_ - HEADER_TAIL_SIZE -1 ] ){
                 ESP_LOGW(TAG, "error receiving data block; ignoring");
                 this->buffer_pos_= 0;
