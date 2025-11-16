@@ -86,6 +86,8 @@ namespace micradar {
     static constexpr uint8_t DATA_FRAME_TAIL[HEADER_TAIL_SIZE] = { 0x54, 0x43 };
 
     static inline int two_byte_to_int(char firstbyte, char secondbyte) { return (int16_t) (secondbyte << 8) + firstbyte; }
+    static inline uint8_t lobyte( uint16_t word ) { (uint8_t) 0xff& word };
+    static inline uint8_t hibyte( uint16_t word ) { (uint8_t) ( ( 0xff00 & word )>>8 )};
 
     static inline bool validate_header_footer(const uint8_t *header_tail, const uint8_t *buffer) {
         return std::memcmp(header_tail, buffer, HEADER_TAIL_SIZE) == 0;
@@ -144,14 +146,13 @@ namespace micradar {
 
     void MicradarComponent::issue_data_( uint8_t control, uint8_t command, uint8_t *bytes, uint16_t len ){
         ESP_LOGV(TAG, "Sending CONTROL %02X COMMAND %02X", control, command);
-        uint16_t check = DATA_FRAME_HEADER[0] + DATA_FRAME_HEADER[1] + control + command + (uint8_t) 0xff & len + (uint8_t) (0xff00 & len)>>8 ;
+        uint16_t check = DATA_FRAME_HEADER[0] + DATA_FRAME_HEADER[1] + control + command + hibyte( len )+ lobyte( len ) ;
         for( int i=0; i< len; i++) check += bytes[i];
         this->write_array( DATA_FRAME_HEADER, sizeof( DATA_FRAME_HEADER ) );
-        this->write_array( control, sizeof( control ));
-        this->write_array( command, sizeof( command ));
-        this->write_array( len, sizeof( len ));
-        this->write_array( bytes, len );
-        this->write_array( check, sizeof( check ));
+        uint8_t ctrl_bytes[4] = { control, command, hibyte( len ), lobyte ( len ) };
+        this->write_array( ctrl_bytes, sizeof( ctrl_bytes ));
+        this->write_array( bytes, len  );
+        this->write_array( &check, sizeof( check ));
         this->write_array( DATA_FRAME_TAIL, sizeof( DATA_FRAME_TAIL ) );
     }
     
