@@ -10,7 +10,7 @@ CODEOWNERS = ["@pochta88.ap"]
 MULTI_CONF = True
 
 micradar_ns = cg.esphome_ns.namespace("micradar")
-micradarComponent = micradar_ns.class_("MicradarComponent", cg.Component, uart.UARTDevice)
+MicradarComponent = micradar_ns.class_("MicradarComponent", cg.Component, uart.UARTDevice)
 
 CONF_MICRADAR_ID = "micradar_id"
 
