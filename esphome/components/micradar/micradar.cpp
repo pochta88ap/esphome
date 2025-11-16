@@ -171,7 +171,7 @@ namespace micradar {
                     case CMD_MODULE_RESET:
                         break;
                     default:
-                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
                         break;
                 }
                 break;
@@ -186,7 +186,7 @@ namespace micradar {
                     case CMD_FIRMWARE_VERSION_QUERY:
                         break;
                     default:
-                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
                         break;
                 }
                 break;
@@ -199,14 +199,14 @@ namespace micradar {
                     case CMD_INITIALIZATION_PROGRESS_QUERY:
                         break;
                     default:
-                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
                         break;
                 }
                 break;
             case CTRL_INSTALLATION_METHOD:
                 switch( commandWord ){
                     default:
-                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
                         break;
                 }
                 break;
@@ -229,7 +229,7 @@ namespace micradar {
                     case CMD_BODY MOVEMENT_PARAMETER_QUERY:
                         break;
                     default:
-                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
                         break;
                 }
                 break;
@@ -242,26 +242,26 @@ namespace micradar {
                     case CMD_INITIALIZATION_PROGRESS_QUERY:
                         break;
                     default:
-                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
                         break;
             }
             break;
         case CTRL_FALL_DETECTION:
             switch( commandWord ){
                     default:
-                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
                         break;
             }
             break;
         case CTRL_OTA:
             switch( commandWord ){
                     default:
-                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
                         break;
             }
             break;
         default:
-            ESP_LOGW(TAG, "unknown control word %02X", control);
+            ESP_LOGW(TAG, "unknown control word %02X", controlWord);
             break;
         }
         
