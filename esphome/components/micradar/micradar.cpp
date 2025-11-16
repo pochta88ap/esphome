@@ -246,12 +246,7 @@ namespace micradar {
         uint8_t buf = 0;
         this->issue_data_( CTRL_TRACK_FUNCTION, CMD_TRACK_INFORMATION_QUERY, &buf, sizeof( buf) );
     }
-    void MicradarComponent::issue_start_OTA_upgrade_( uint32_t firmware_package_size ){
-        this->issue_data_( CTRL_OTA, CMD_START_OTA_UPGRADE, (uint8_t&) &firmware_package_size, sizeof( firmware_package_size ) );
-    }
-    void MicradarComponent::issue_upgrade_package_transmission_( uint8_t *packet, uint32_t len ){
-        this->issue_data_( CTRL_OTA, CMD_UPGRADE_PACKAGE_TRANSMISSION, packet, len );
-    }
+   
     void MicradarComponent::issue_stop_OTA_upgrade_( uint8_t value ){
         this->issue_data_( CTRL_OTA, CMD_stop_ota_upgrade, &value, sizeof( value) );
     }
