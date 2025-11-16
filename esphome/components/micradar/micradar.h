@@ -43,7 +43,7 @@ static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buf
 
   uint8_t buffer_pos_ = 0;  // where to resume processing/populating buffer
   uint8_t buffer_data_[MAX_LINE_LENGTH];
-  uint8_t issue_data_[MAX_LINE_LENGTH];
+  
   uint8_t checkDigit_( uint8_t *buf, uint16_t len);
   void issue_data_( uint8_t control, uint8_t command, uint8_t *bytes, uint16_t len );
   void handle_data_();
