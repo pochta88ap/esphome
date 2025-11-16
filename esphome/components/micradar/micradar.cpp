@@ -40,12 +40,13 @@ namespace micradar {
     static constexpr uint8_t CMD_INITIALIZATION_PROGRESS_QUERY = 0x81;
     // Human presence function
     static constexpr uint8_t CMD_ENABLE_DISABLE_HUMAN_PRESENCE_FUNCTION = 0x00;
-    static constexpr uint8_t CMD_HUMAN_PRESENCE_INFORMATION_QUEERY = 0x01;
-    static constexpr uint8_t CMD_MOVEMENT_INFORMATION_QUERY = 0x02;
-    static constexpr uint8_t CMD_BODY_MOVEMENT_PARAMETER_QUERY = 0x03;
+    static constexpr uint8_t CMD_HUMAN_PRESENCE_INFORMATION_REPORT = 0x01;
+    static constexpr uint8_t CMD_MOVEMENT_INFORMATION_REPOERT = 0x02;
+    static constexpr uint8_t CMD_BODY_MOVEMENT_PARAMETER_REPORT = 0x03;
     static constexpr uint8_t CMD_HUMAN_PRESENCE_SWITCH_QUERY = 0x80;
     static constexpr uint8_t CMD_PRESENCE_INFORMATION_QUERY = 0x81;
     static constexpr uint8_t CMD_MOVEMENT_INFORMATION_QUERY = 0x82;
+    static constexpr uint8_t CMD_BODY_MOVEMENT_PARAMETER_QUERY = 0x83;
     static constexpr uint8_t CMD_BODY_MOVEMENT = 0x83;
     // Track function
     static constexpr uint8_t CMD_TRACK_INFORMATION = 0x02;
