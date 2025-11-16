@@ -129,7 +129,7 @@ namespace micradar {
                 this->buffer_pos_= 0;
                 return;
             }
-             ESP_LOGV(TAG, "Handling Data: %s sum: %d ", format_hex_pretty(this->buffer_data_, this->buffer_pos_).c_str(), sum);
+             ESP_LOGV(TAG, "Handling Data: %s sum: %02X ", format_hex_pretty(this->buffer_data_, this->buffer_pos_).c_str(), sum);
             this->handle_data_();
             this->buffer_pos_ = 0;  // Reset position index for next message
         }
@@ -183,6 +183,55 @@ namespace micradar {
             break;
         }
         
+    }
+    void MicradarComponent::issue_heartbit_package_(){
+        uint8_t[] buff={0};
+        this->issue_data_( CTRL_SYSTEM_FUNCTIONS, CMD_HEARTBIT_PACKAGE, buf, sizeof( buf) );
+    }
+    void MicradarComponent::issue_module_reset_(){
+
+    }
+    void MicradarComponent::issue_product_model_query_(){
+
+    }
+    void MicradarComponent::issue_product_id_query_(){
+
+    }
+    void MicradarComponent::issue_hardware_model_query_(){
+
+    }
+    void MicradarComponent::issue_firmware_version_query_(){
+
+    }
+    void MicradarComponent::issue_initialization_progress_query_(){
+
+    }
+    void MicradarComponent::issue_enable_human_presence_function_( uint8_t value ){
+
+    }
+    void MicradarComponent::issue_human_presence_switch_query_(){
+
+    }
+    void MicradarComponent::issue_presence_information_query_(){
+
+    }
+    void MicradarComponent::issue_movement_information_query_(){
+
+    }
+    void MicradarComponent::issue_body_movement_parameter_query_(){
+
+    }
+    void MicradarComponent::issue_track_information_query_(){
+
+    }
+    void MicradarComponent::issue_start_OTA_upgrade_( uint38_t firmware_package_size ){
+
+    }
+    void MicradarComponent::issue_upgrade_package_transmission_( uint8_t *packet, uint32_t len ){
+
+    }
+    void MicradarComponent::issue_stop_OTA_upgrade_( uint8_t value ){
+
     }
 }
 
