@@ -16,7 +16,7 @@ CONF_MICRADAR_ID = "micradar_id"
 
 CONFIG_SCHEMA = cv.Schema(
     {
-        cv.GenerateID(): cv.declare_id(micradarComponent),
+        cv.GenerateID(): cv.declare_id(MicradarComponent),
         
     }
 )
