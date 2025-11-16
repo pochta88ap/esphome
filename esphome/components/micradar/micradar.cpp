@@ -102,7 +102,13 @@ namespace micradar {
     }
 
     void MicradarComponent::dump_config() {
-    
+#ifdef USE_BUTTON
+        ESP_LOGCONFIG(TAG, "Buttons:");
+        
+        LOG_BUTTON("  ", "Query", this->query_button_);
+        LOG_BUTTON("  ", "Restart", this->restart_button_);
+#endif
+
     }
 
     void MicradarComponent::setup() { read_all_info(); }
