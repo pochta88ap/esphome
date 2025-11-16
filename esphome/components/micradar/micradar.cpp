@@ -27,7 +27,7 @@ namespace micradar {
 
     // Command words
     // System functions
-    static constexpr uint8_t CMD_HEARTBIT_PACKAGE =0x01;
+    static constexpr uint8_t CMD_HEARTBIT_PACKAGE_QUERY =0x01;
     static constexpr uint8_t CMD_MODULE_RESET = 0x02;
     // Product_info
     static constexpr uint8_t CMD_PRODUCT_MODEL_QUERY = 0xA1;
@@ -165,29 +165,110 @@ namespace micradar {
         uint8_t dataLength  = this->buffer_data_[SHIFT_DATA_LENGTH_WORD];
         switch( controlWord ){
             case CTRL_SYSTEM_FUNCTIONS:
+                switch( commandWord ){
+                    case CMD_HEARTBIT_PACKAGE_QUERY:
+                        break;
+                    case CMD_MODULE_RESET:
+                        break;
+                    default:
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        break;
+                }
                 break;
             case CTRL_PRODUCT_INFO:
+                switch( commandWord ){
+                    case CMD_PRODUCT_MODEL_QUERY:
+                        break;
+                    case CMD_PRODUCT_ID_QUERY:
+                        break;
+                    case CMD_HARDWARE_MODEL_QUERY:
+                        break;
+                    case CMD_FIRMWARE_VERSION_QUERY:
+                        break;
+                    default:
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        break;
+                }
                 break;
             case CTRL_WORKING_STATUS:
+                switch( commandWord ){
+                    case CMD_MESSAGE_OF_INITIALIZATION_COMPLETE:
+                        break;
+                    case CMD_UPLOAD_OF_RADAR_FAILURE:
+                        break;
+                    case CMD_INITIALIZATION_PROGRESS_QUERY:
+                        break;
+                    default:
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        break;
+                }
                 break;
             case CTRL_INSTALLATION_METHOD:
+                switch( commandWord ){
+                    default:
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        break;
+                }
                 break;
             case CTRL_HUMAN_PRESENCE_FUNCTION:
+                switch( commandWord ){
+                    case CMD_ENABLE_DISABLE_HUMAN_PRESENCE_FUNCTION:
+                        break;
+                    case CMD_HUMAN_PRESENCE_INFORMATION_REPORT:
+                        break;
+                    case CMD_MOVEMENT_INFORMATION_REPORT:
+                        break;
+                    case CMD_BODY_MOVEMENT_PARAMETER_REPORT:
+                        break;
+                    case CMD_HUMAN_PRESENCE_SWITCH_QUERY:
+                        break;
+                    case CMD_PRESENCE_INFORMATION_QUERY:
+                        break;
+                    case CMD_MOVEMENT_INFORMATION_QUERY:
+                        break;
+                    case CMD_BODY MOVEMENT_PARAMETER_QUERY:
+                        break;
+                    default:
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        break;
+                }
                 break;
         case CTRL_TRACK_FUNCTION:
+            switch( commandWord ){
+                    case CMD_TRACK_INFORMATION:
+                        break;
+                    case CMD_TRACK_INFORMATION_QUERY:
+                        break;
+                    case CMD_INITIALIZATION_PROGRESS_QUERY:
+                        break;
+                    default:
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        break;
+            }
             break;
         case CTRL_FALL_DETECTION:
+            switch( commandWord ){
+                    default:
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        break;
+            }
             break;
         case CTRL_OTA:
+            switch( commandWord ){
+                    default:
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", control, command);
+                        break;
+            }
             break;
         default:
+            ESP_LOGW(TAG, "unknown control word %02X", control);
             break;
         }
         
     }
-    void MicradarComponent::issue_heartbit_package_(){
+    void MicradarComponent::issue_heartbit_package_query_(){
         uint8_t buf = 0;
-        this->issue_data_( CTRL_SYSTEM_FUNCTIONS, CMD_HEARTBIT_PACKAGE, &buf, sizeof( buf) );
+        this->issue_data_( CTRL_SYSTEM_FUNCTIONS, CMD_HEARTBIT_PACKAGE_QUERY, &buf, sizeof( buf) );
     }
 
     void MicradarComponent::issue_module_reset_(){
