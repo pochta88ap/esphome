@@ -248,7 +248,7 @@ namespace micradar {
     }
    
     void MicradarComponent::issue_stop_OTA_upgrade_( uint8_t value ){
-        this->issue_data_( CTRL_OTA, CMD_stop_ota_upgrade, &value, sizeof( value) );
+        this->issue_data_( CTRL_OTA, CMD_STOP_OTA_UPGRADE, &value, sizeof( value) );
     }
 }
 
