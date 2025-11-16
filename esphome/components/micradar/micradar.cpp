@@ -9,6 +9,11 @@ namespace micradar {
 
     static const char *const TAG = "micradar";
 
+    // Data positions
+    static constexpr uint8_t SHIFT_CONTROL_WORD = 0x02;
+    static constexpr uint8_t SHIFT_COMMAND_WORD = 0x03;
+    static constexpr uint8_t SHIFT_DATA_LENGTH_WORD = 0x04;
+    static constexpr uint8_t SHIFT_DATA = 0x05;
     // Contfol words
     static constexpr uint8_t CTRL_SYSTEM_FUNCTIONS = 0x01;
     static constexpr uint8_t CTRL_PRODUCT_INFO = 0x02;
@@ -123,7 +128,7 @@ namespace micradar {
                 return;
             }
              ESP_LOGV(TAG, "Handling Data: %s sum: %d ", format_hex_pretty(this->buffer_data_, this->buffer_pos_).c_str(), sum);
-            //this->handle_periodic_data_();
+            this->handle_data_();
             this->buffer_pos_ = 0;  // Reset position index for next message
         }
 
@@ -135,6 +140,47 @@ namespace micradar {
             sum+= buf[i];
         }
         return (uint8_t) 0xff & sum; 
+    }
+
+    void Micradar::issue_data_( uint8_t control, uint8_t command uint8_t *bytes, uint8_t len ){
+        ESP_LOGV(TAG, "Sending CONTROL %02X COMMAND %02X", control, command);
+        uint16_t check = DATA_FRAME_HEADER[0] + DATA_FRAME_HEADER[1] + control + command + (uint8_t) 0xff & len (uint8_t) (0xff00 & len)>>8 ;
+        for( int i=0; i< len; i++) check += bytes[i];
+        this->write_array( DATA_FRAME_HEADER, sizeof( DATA_FRAME_HEADER ) );
+        this->write_array( control, sizeof( control ));
+        this->write_array( command, sizeof( command ));
+        this->write_array( len, sizeof( len ));
+        this->write_array( bytes, len );
+        this->write_array( check, sizeof( check ));
+        this->write_array( DATA_FRAME_TAIL, sizeof( DATA_FRAME_TAIL ) );
+    }
+    
+    void MicradarComponent::handle_data_(){
+
+        uint8_t controlWord = this->buffer_data[SHIFT_COMTROL_WORD];
+        uint8_t commandWord = this->buffer_data[SHIFT_COMMAND_WORD];
+        uint8_t dataLength  = this->buffer_data[SHIFT_DATA_LENGTH_WORD];
+        switch( controlWord ){
+            case CTRL_SYSTEM_FUNCTIONS:
+                break;
+            case CTRL_PRODUCT_INFO:
+                break;
+            case CTRL_WORKING_STATUS:
+                break;
+            case CTRL_INSTALLATION_METHOD:
+                break;
+            case CTRL_HUMAN_PRESENCE_FUNCTION:
+                break;
+        case CTRL_TRACK_FUNCTION:
+            break;
+        case CTRL_FALL_DETECTION:
+            break;
+        case CTRL_OTA:
+            break;
+        default:
+            break;
+        }
+        
     }
 }
 
