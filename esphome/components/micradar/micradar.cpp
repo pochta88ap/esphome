@@ -41,7 +41,7 @@ namespace micradar {
     // Human presence function
     static constexpr uint8_t CMD_ENABLE_DISABLE_HUMAN_PRESENCE_FUNCTION = 0x00;
     static constexpr uint8_t CMD_HUMAN_PRESENCE_INFORMATION_REPORT = 0x01;
-    static constexpr uint8_t CMD_MOVEMENT_INFORMATION_REPOERT = 0x02;
+    static constexpr uint8_t CMD_MOVEMENT_INFORMATION_REPORT = 0x02;
     static constexpr uint8_t CMD_BODY_MOVEMENT_PARAMETER_REPORT = 0x03;
     static constexpr uint8_t CMD_HUMAN_PRESENCE_SWITCH_QUERY = 0x80;
     static constexpr uint8_t CMD_PRESENCE_INFORMATION_QUERY = 0x81;
@@ -226,7 +226,7 @@ namespace micradar {
                         break;
                     case CMD_MOVEMENT_INFORMATION_QUERY:
                         break;
-                    case CMD_BODY MOVEMENT_PARAMETER_QUERY:
+                    case CMD_BODY_MOVEMENT_PARAMETER_QUERY:
                         break;
                     default:
                         ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
