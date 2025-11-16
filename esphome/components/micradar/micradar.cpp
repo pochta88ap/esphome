@@ -159,7 +159,7 @@ namespace micradar {
     
     void MicradarComponent::handle_data_(){
 
-        uint8_t controlWord = this->buffer_data_[SHIFT_COMTROL_WORD];
+        uint8_t controlWord = this->buffer_data_[SHIFT_CONTROL_WORD];
         uint8_t commandWord = this->buffer_data_[SHIFT_COMMAND_WORD];
         uint8_t dataLength  = this->buffer_data_[SHIFT_DATA_LENGTH_WORD];
         switch( controlWord ){
