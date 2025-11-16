@@ -1,5 +1,12 @@
 #include "micradar.h"
 
+#ifdef USE_NUMBER
+#include "esphome/components/number/number.h"
+#endif
+#ifdef USE_SENSOR
+#include "esphome/components/sensor/sensor.h"
+#endif
+
 
 #include "esphome/core/application.h"
 
