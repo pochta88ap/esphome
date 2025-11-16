@@ -86,8 +86,8 @@ namespace micradar {
     static constexpr uint8_t DATA_FRAME_TAIL[HEADER_TAIL_SIZE] = { 0x54, 0x43 };
 
     static inline int two_byte_to_int(char firstbyte, char secondbyte) { return (int16_t) (secondbyte << 8) + firstbyte; }
-    static inline uint8_t lobyte( uint16_t word ) { (uint8_t) 0xff& word };
-    static inline uint8_t hibyte( uint16_t word ) { (uint8_t) ( ( 0xff00 & word )>>8 )};
+    static inline uint8_t lobyte( uint16_t word ) { (uint8_t) 0xff & word; }
+    static inline uint8_t hibyte( uint16_t word ) { (uint8_t) ( ( 0xff00 & word )>>8 ); }
 
     static inline bool validate_header_footer(const uint8_t *header_tail, const uint8_t *buffer) {
         return std::memcmp(header_tail, buffer, HEADER_TAIL_SIZE) == 0;
