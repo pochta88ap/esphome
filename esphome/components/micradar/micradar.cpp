@@ -232,7 +232,7 @@ namespace micradar {
 
     void MicradarComponent::issue_presence_information_query_(){
         uint8_t buf = 0;
-        this->issue_data_( CTRL_HUMAN_PRESENCE_FUNCTION, CMD_HUMAN_PRESENCE_INFORMATION_QUERY, &buf, sizeof( buf) );
+        this->issue_data_( CTRL_HUMAN_PRESENCE_FUNCTION, CMD_PRESENCE_INFORMATION_QUERY, &buf, sizeof( buf) );
     }
     void MicradarComponent::issue_movement_information_query_(){
         uint8_t buf = 0;
@@ -247,7 +247,7 @@ namespace micradar {
         this->issue_data_( CTRL_TRACK_FUNCTION, CMD_TRACK_INFORMATION_QUERY, &buf, sizeof( buf) );
     }
     void MicradarComponent::issue_start_OTA_upgrade_( uint32_t firmware_package_size ){
-        this->issue_data_( CTRL_OTA, CMD_START_OTA_UPGRADE, &firmware_package_size, sizeof( firmware_package_size ) );
+        this->issue_data_( CTRL_OTA, CMD_START_OTA_UPGRADE, (uint8_t&) &firmware_package_size, sizeof( firmware_package_size ) );
     }
     void MicradarComponent::issue_upgrade_package_transmission_( uint8_t *packet, uint32_t len ){
         this->issue_data_( CTRL_OTA, CMD_UPGRADE_PACKAGE_TRANSMISSION, packet, len );
