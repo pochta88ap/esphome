@@ -32,8 +32,8 @@ namespace micradar {
     // Product_info
     static constexpr uint8_t CMD_PRODUCT_MODEL_QUERY = 0xA1;
     static constexpr uint8_t CMD_PRODUCT_ID_QUERY = 0xA2;
-    static constexpr uint8_t CMD_HARDWARE_MODEL_ID = 0xA3;
-    static constexpr uint8_t CMD_FIRMWARE_VERSION_ID = 0xA4;
+    static constexpr uint8_t CMD_HARDWARE_MODEL_QUERY = 0xA3;
+    static constexpr uint8_t CMD_FIRMWARE_VERSION_QUERY = 0xA4;
     // Working status
     static constexpr uint8_t CMD_MESSAGE_OF_INITIALIZATION_COMPLETE = 0x01;
     static constexpr uint8_t CMD_UPLOAD_OF_RADAR_FAILURE = 0x02;
@@ -211,7 +211,7 @@ namespace micradar {
 
     void MicradarComponent::issue_firmware_version_query_(){
          uint8_t buf = 0;
-        this->issue_data_( CTRL_PRODUCT_INFO, CMD_FIRMWARE_INFO_QUERY, &buf, sizeof( buf) );
+        this->issue_data_( CTRL_PRODUCT_INFO, CMD_FIRMWARE_VERSION_QUERY, &buf, sizeof( buf) );
     }
 
     void MicradarComponent::issue_initialization_progress_query_(){
