@@ -121,6 +121,11 @@ namespace micradar {
         issue_body_movement_parameter_query_();
     }
 
+    void MicradarComponent restart_and_read_all_info(){
+        issue_module_reset_();
+        read_all_info();
+    }
+
 
     void MicradarComponent::loop() {
         while (this->available()) {

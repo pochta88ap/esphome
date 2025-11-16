@@ -57,6 +57,7 @@ static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buf
   void issue_data_( uint8_t control, uint8_t command, uint8_t *bytes, uint16_t len );
   void handle_data_();
   void read_all_info();
+  void restart_and_read_all_info();
   //issue command functions
   void issue_heartbit_package_query_();
   void issue_module_reset_();
