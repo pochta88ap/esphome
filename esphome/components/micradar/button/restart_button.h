@@ -4,7 +4,7 @@
 #include "../micradar.h"
 
 namespace esphome {
-namespace ld2410 {
+namespace micradar {
 
 class RestartButton : public button::Button, public Parented<MicradarComponent> {
  public:
