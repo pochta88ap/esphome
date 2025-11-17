@@ -222,7 +222,9 @@ namespace micradar {
 #ifdef USE_TEXT_SENSOR
                         if (this->product_model_text_sensor_ != nullptr) {
                             ESP_LOGV(TAG, "product model: %s ", format_hex_pretty(this->buffer_data_+6, this->buffer_data_[5] ).c_str());
-                      //      this->product_model_text_sensor_->publish_state(product_info);
+                            std:String product_info(this->buffer_data_+6);
+                            ESP_LOGV(TAG, "product model: %s, %s  ", format_hex_pretty(this->buffer_data_+6, this->buffer_data_[5] ).c_str(), product_info.c_str());
+                            this->product_model_text_sensor_->publish_state(product_info);
                         }
 #endif
                         break;
