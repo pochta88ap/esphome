@@ -30,6 +30,7 @@ namespace micradar {
     static constexpr uint8_t CTRL_TRACK_FUNCTION = 0x82;
     static constexpr uint8_t CTRL_FALL_DETECTION = 0x83;
     static constexpr uint8_t CTRL_OTA = 0x03;
+    static constexpr uint8_t CTRL_SHUTDOWN = 0x04;
    
 
     // Command words
@@ -67,6 +68,8 @@ namespace micradar {
     static constexpr uint8_t CMD_COMPLETED = 0x01;
     static constexpr uint8_t CMD_NOT_COMPLETED = 0x00;
 
+    static constexpr uint8_t CMD_SHUTDOWN_COMPLETED = 0x04;
+
     static constexpr uint8_t CMD_ENABLE = 0x01;
     static constexpr uint8_t CMD_DISABLE = 0x00;
     static constexpr uint8_t CMD_NON_PRESENCE = 0x00;
@@ -81,6 +84,7 @@ namespace micradar {
 
     static constexpr uint8_t CMD_FIRMWARE_PACKAGE_TRANSMISSION_COMPLETED = 0x01;
     static constexpr uint8_t CMD_FIRMWARE_PACKAGE_TRANSMISSION_NOT_COMPLETED = 0x02;
+
 
     struct Uint8ToString {
         const uint8_t value;
@@ -324,6 +328,19 @@ namespace micradar {
             break;
         case CTRL_OTA:
             switch( commandWord ){
+                    default:
+                        ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
+                        break;
+            }
+            break;
+        default:
+            ESP_LOGW(TAG, "unknown control word %02X", controlWord);
+            break;
+        }
+         case CTRL_SHUTDOWN:
+            switch( commandWord ){
+                    case CMD_SHUTDOWN_COMPLETED:
+                        ESP_LOGW(TAG, "shutdown completed");
                     default:
                         ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
                         break;

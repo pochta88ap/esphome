@@ -15,8 +15,17 @@ from .. import CONF_MICRADAR_ID, MicradarComponent, micradar_ns
 
 QueryButton = micradar_ns.class_("QueryButton", button.Button)
 RestartButton = micradar_ns.class_("RestartButton", button.Button)
+InitProgressButton = micradar_ns.class_("InitProgressButton", button.Button)
+HumanPresenceQueryButton = micradar_ns.class_("HumanPresenceQueryButton", button.Button)
+TrackQueryButton = micradar_ns.class_("TrackQueryButton", button.Button)
 
 CONF_QUERY_PARAMS = "query_params"
+CONF_INITIALIZATION_PROGRESS_QUERY = "initialization_progress_query"
+CONF_HUMAN_PRESENCE_QUERY = "human_presence_query"
+CONF_TRACK_INFORMATION_QUERY = "track_information_query"
+
+
+
 
 CONFIG_SCHEMA = {
     cv.GenerateID(CONF_MICRADAR_ID): cv.use_id(MicradarComponent),
@@ -28,6 +37,21 @@ CONFIG_SCHEMA = {
     ),
     cv.Optional(CONF_QUERY_PARAMS): button.button_schema(
         QueryButton,
+        entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+        icon=ICON_DATABASE,
+    ),
+     cv.Optional(CONF_INITIALIZATION_PROGRESS_QUERY): button.button_schema(
+        InitProgressButton,
+        entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+        icon=ICON_DATABASE,
+    ),
+    cv.Optional(CONF_HUMAN_PRESENCE_QUERY): button.button_schema(
+        HumanPresenceQueryButton,
+        entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+        icon=ICON_DATABASE,
+    ),
+     cv.Optional(CONF_TRACK_INFORMATION_QUERY): button.button_schema(
+        TrackQueryButton,
         entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         icon=ICON_DATABASE,
     ),
@@ -44,3 +68,15 @@ async def to_code(config):
         b = await button.new_button(query_params_config)
         await cg.register_parented(b, config[CONF_MICRADAR_ID])
         cg.add(micradar_component.set_query_button(b))
+    if initialization_progress_query_config := config.get(CONF_INITIALIZATION_PROGRESS_QUERY):
+        b = await button.new_button(initialization_progress_query_config)
+        await cg.register_parented(b, config[CONF_MICRADAR_ID])
+        cg.add(micradar_component.set_init_progress_query_button(b))
+    if human_presemce_query_config := config.get(CONF_HUMAN_PRESENCE_QUERY):
+        b = await button.new_button(human_presemce_query_config)
+        await cg.register_parented(b, config[CONF_MICRADAR_ID])
+        cg.add(micradar_component.set_human_query_button(b))
+    if human_presemce_query_config := config.get(CONF_TRACK_INFORMATION_QUERY):
+        b = await button.new_button(human_presemce_query_config)
+        await cg.register_parented(b, config[CONF_MICRADAR_ID])
+        cg.add(micradar_component.set_track_query_button(b))
