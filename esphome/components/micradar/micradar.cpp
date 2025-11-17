@@ -337,6 +337,7 @@ namespace micradar {
                 switch( commandWord ){
                     case CMD_SHUTDOWN_COMPLETED:
                         ESP_LOGW(TAG, "shutdown completed");
+                        break;
                     default:
                         ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
                         break;
