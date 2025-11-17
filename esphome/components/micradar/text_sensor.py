@@ -19,13 +19,14 @@ CONFIG_SCHEMA = {
     ),
     
 }
-
+CONF_PRODUCT_MODEL = "product_model"
+CONF_PRODUCT_ID = "product_id"
 async def to_code(config):
     micradar_component = await cg.get_variable(config[CONF_MICRADAR_ID])
-    if product_model_config := config.get(CONF_VERSION):
+    if product_model_config := config.get(CONF_PRODUCT_MODEL):
         sens = await text_sensor.new_text_sensor(product_model_config)
         cg.add(micradar_component.set_version_text_sensor(sens))
-    if product_id_config := config.get(CONF_VERSION):
+    if product_id_config := config.get(CONF_PRODUCT_ID):
         sens = await text_sensor.new_text_sensor(product_id_config)
         cg.add(micradar_component.set_version_text_sensor(sens))
     
