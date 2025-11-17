@@ -221,28 +221,29 @@ namespace micradar {
                     case CMD_PRODUCT_MODEL_QUERY:
 #ifdef USE_TEXT_SENSOR
                         if (this->product_model_text_sensor_ != nullptr) {
-                            this->product_model_text_sensor_->publish_state(product_info);
+                            ESP_LOGV(TAG, "product model: %s ", format_hex_pretty(this->buffer_data_+6, this->buffer_data +5 ).c_str());
+                      //      this->product_model_text_sensor_->publish_state(product_info);
                         }
 #endif
                         break;
                     case CMD_PRODUCT_ID_QUERY:
 #ifdef USE_TEXT_SENSOR
                         if (this->product_id_text_sensor_ != nullptr) {
-                            this->product_id_text_sensor_->publish_state(product_id);
+                        //    this->product_id_text_sensor_->publish_state(product_id);
                         }
 #endif
                         break;
                     case CMD_HARDWARE_MODEL_QUERY:
 #ifdef USE_TEXT_SENSOR
                         if (this->hardware_model_text_sensor_ != nullptr) {
-                            this->hardware_model_text_sensor_->publish_state(hardware_model);
+                          //  this->hardware_model_text_sensor_->publish_state(hardware_model);
                         }
 #endif
                         break;
                     case CMD_FIRMWARE_VERSION_QUERY:
 #ifdef USE_TEXT_SENSOR
                         if (this->firmware_version_text_sensor_ != nullptr) {
-                            this->firmware_version_text_sensor_->publish_state(firmware_version);
+                            //this->firmware_version_text_sensor_->publish_state(firmware_version);
                         }
 #endif
                         break;
