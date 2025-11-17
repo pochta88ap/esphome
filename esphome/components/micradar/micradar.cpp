@@ -221,9 +221,9 @@ namespace micradar {
                     case CMD_PRODUCT_MODEL_QUERY:
 #ifdef USE_TEXT_SENSOR
                         if (this->product_model_text_sensor_ != nullptr) {
-                            product_info_ = new std::string((char*)(this->buffer_data_+6));
+                            product_model_ = new std::string((char*)(this->buffer_data_+6));
                             ESP_LOGV(TAG, "product model: %s", product_info.c_str());
-                            this->product_model_text_sensor_->publish_state(product_info_);
+                            this->product_model_text_sensor_->publish_state(product_model_);
                         }
 #endif
                         break;
