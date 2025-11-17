@@ -306,8 +306,8 @@ namespace micradar {
                         break;
                 }
                 break;
-        case CTRL_TRACK_FUNCTION:
-            switch( commandWord ){
+            case CTRL_TRACK_FUNCTION:
+                switch( commandWord ){
                     case CMD_TRACK_INFORMATION:
                         break;
                     case CMD_TRACK_INFORMATION_QUERY:
@@ -317,40 +317,35 @@ namespace micradar {
                     default:
                         ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
                         break;
-            }
-            break;
-        case CTRL_FALL_DETECTION:
-            switch( commandWord ){
+                }
+                break;
+            case CTRL_FALL_DETECTION:
+                switch( commandWord ){
                     default:
                         ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
                         break;
-            }
-            break;
-        case CTRL_OTA:
-            switch( commandWord ){
+                }
+                break;
+            case CTRL_OTA:
+                switch( commandWord ){
                     default:
                         ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
                         break;
-            }
-            break;
-        default:
-            ESP_LOGW(TAG, "unknown control word %02X", controlWord);
-            break;
-        }
-         case CTRL_SHUTDOWN:
-            switch( commandWord ){
+                }
+                break;
+            case CTRL_SHUTDOWN:
+                switch( commandWord ){
                     case CMD_SHUTDOWN_COMPLETED:
                         ESP_LOGW(TAG, "shutdown completed");
                     default:
                         ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
                         break;
-            }
-            break;
-        default:
-            ESP_LOGW(TAG, "unknown control word %02X", controlWord);
-            break;
-        }
-        
+                }
+                break;
+            default:
+                ESP_LOGW(TAG, "unknown control word %02X", controlWord);
+                break;
+        }        
     }
     void MicradarComponent::issue_heartbit_package_query_(){
         uint8_t buf = 0;
