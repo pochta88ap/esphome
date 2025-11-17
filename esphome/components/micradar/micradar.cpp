@@ -124,7 +124,10 @@ namespace micradar {
 
     }
 
-    void MicradarComponent::setup() { this->read_all_info(); }
+    void MicradarComponent::setup() { 
+        ESP_LOGCONFIG(TAG, "Running setup");
+    //    this->read_all_info();
+     }
 
     void MicradarComponent::read_all_info(){
         this->issue_product_model_query_();
