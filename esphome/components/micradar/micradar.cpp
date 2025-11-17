@@ -222,7 +222,7 @@ namespace micradar {
 #ifdef USE_TEXT_SENSOR
                         if (this->product_model_text_sensor_ != nullptr) {
                             product_model_ = ((char*)(this->buffer_data_+6));
-                            ESP_LOGV(TAG, "product model: %s", product_info.c_str());
+                            ESP_LOGV(TAG, "product model: %s", product_model_.c_str());
                             this->product_model_text_sensor_->publish_state(product_model_);
                         }
 #endif
@@ -232,7 +232,7 @@ namespace micradar {
                         if (this->product_id_text_sensor_ != nullptr) {
                             product_id_ = ((char*)(this->buffer_data_+6));
                             ESP_LOGV(TAG, "product id: %s", product_id_.c_str());
-                            this->product_id_text_sensor_->publish_state(product_id);
+                            this->product_id_text_sensor_->publish_state(product_id_);
                         }
 #endif
                         break;
