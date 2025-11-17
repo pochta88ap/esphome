@@ -3,7 +3,7 @@
 namespace esphome {
 namespace micradar {
 
-void HumanPresenceButton::press_action() {  }
+void HumanPresenceQueryButton::press_action() {  }
 
 }  // namespace ld2410
 }  // namespace esphome
