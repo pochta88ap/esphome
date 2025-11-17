@@ -87,6 +87,11 @@ namespace micradar {
         const char *str;
     };
 
+    struct StringToUint8 {
+        const char *str;
+        const uint8_t value;
+    };
+
 
     static constexpr uint8_t HEADER_TAIL_SIZE = 2;
 
@@ -107,6 +112,14 @@ namespace micradar {
         
         LOG_BUTTON("  ", "Query", this->query_button_);
         LOG_BUTTON("  ", "Restart", this->restart_button_);
+#endif
+
+#ifdef USE_TEXT_SENSOR
+  ESP_LOGCONFIG(TAG, "Text Sensors:");
+  LOG_TEXT_SENSOR("  ", "product Model", this->product_model_text_sensor_);
+  LOG_TEXT_SENSOR("  ", "Product Id", this->product_id_text_sensor_);
+  LOG_TEXT_SENSOR("  ", "Hardware Model", this->hardware_model_text_sensor_);
+  LOG_TEXT_SENSOR("  ", "Firmware Version", this->firmware_version_text_sensor_);
 #endif
 
     }
