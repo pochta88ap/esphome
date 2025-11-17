@@ -42,6 +42,13 @@ static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buf
   SUB_BUTTON(restart)
 #endif
 
+#ifdef USE_TEXT_SENSOR
+  SUB_TEXT_SENSOR(product_model)
+  SUB_TEXT_SENSOR(product_id)
+  SUB_TEXT_SENSOR(hardware_model)
+  SUB_TEXT_SENSOR(firmware_version)
+#endif
+
  public:
   void setup() override;
   void dump_config() override;
