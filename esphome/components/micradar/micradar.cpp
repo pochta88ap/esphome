@@ -85,6 +85,23 @@ namespace micradar {
     static constexpr uint8_t CMD_FIRMWARE_PACKAGE_TRANSMISSION_COMPLETED = 0x01;
     static constexpr uint8_t CMD_FIRMWARE_PACKAGE_TRANSMISSION_NOT_COMPLETED = 0x02;
 
+    // Helper functions for lookups
+    template<size_t N> uint8_t find_uint8(const StringToUint8 (&arr)[N], const char *str) {
+    for (const auto &entry : arr) {
+     if (strcmp(str, entry.str) == 0)
+          return entry.value;
+        }
+        return 0xFF;  // Not found
+    }
+
+    template<size_t N> const char *find_str(const Uint8ToString (&arr)[N], uint8_t value) {
+        for (const auto &entry : arr) {
+            if (value == entry.value)
+            return entry.str;
+        }
+    return "";  // Not found
+    }
+
     enum InitializationProgress : uint8_t {
         COMPLETED = 0x01,
         NOT_COMPLETED = 0x00
@@ -322,6 +339,8 @@ namespace micradar {
             case CTRL_WORKING_STATUS:
                 switch( commandWord ){
                     case CMD_MESSAGE_OF_INITIALIZATION_COMPLETE:
+                        const auto *init_state = find_str( InitializationProgress, this->buffer_data_[6]);
+                        ESP_LOGV(TAG, "Initialisation progress: %s", init_state );
                         break;
                     case CMD_UPLOAD_OF_RADAR_FAILURE:
                         break;
@@ -344,18 +363,29 @@ namespace micradar {
                     case CMD_ENABLE_DISABLE_HUMAN_PRESENCE_FUNCTION:
                         break;
                     case CMD_HUMAN_PRESENCE_INFORMATION_REPORT:
+                        const auto *human_presence = find_str( HumanPresence, this->buffer_data_[6]);
+                        ESP_LOGV(TAG, "Human presence: %s", human_presence );
                         break;
                     case CMD_MOVEMENT_INFORMATION_REPORT:
+                        const auto *movement_info = find_str( MovementSate, this->buffer_data_[6]);
+                        ESP_LOGV(TAG, "Movement Info: %s", movement_info );
                         break;
                     case CMD_BODY_MOVEMENT_PARAMETER_REPORT:
+                        
+                        ESP_LOGV(TAG, "Movement parameter: %d", this->buffer_data_[6] );
                         break;
                     case CMD_HUMAN_PRESENCE_SWITCH_QUERY:
                         break;
                     case CMD_PRESENCE_INFORMATION_QUERY:
+                        const auto *human_presence = find_str( HumanPresence, this->buffer_data_[6]);
+                        ESP_LOGV(TAG, "Human presence: %s", human_presence );
                         break;
                     case CMD_MOVEMENT_INFORMATION_QUERY:
+                        const auto *movement_info = find_str( MovementSate, this->buffer_data_[6]);
+                        ESP_LOGV(TAG, "Movement Info: %s", movement_info );
                         break;
                     case CMD_BODY_MOVEMENT_PARAMETER_QUERY:
+                         ESP_LOGV(TAG, "Movement parameter: %d", this->buffer_data_[6] );
                         break;
                     default:
                         ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
