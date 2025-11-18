@@ -20,7 +20,7 @@ HumanPresenceQueryButton = micradar_ns.class_("HumanPresenceQueryButton", button
 TrackQueryButton = micradar_ns.class_("TrackQueryButton", button.Button)
 
 CONF_QUERY_PARAMS = "query_params"
-CONF_INITIALIZATION_PROGRESS_QUERY = "initialization_progress_query"
+CONF_INITIALIZATION_PROGRESS_QUERY = "init_progress_query"
 CONF_HUMAN_PRESENCE_QUERY = "human_presence_query"
 CONF_TRACK_INFORMATION_QUERY = "track_information_query"
 
@@ -72,11 +72,11 @@ async def to_code(config):
         b = await button.new_button(init_progress_query_config)
         await cg.register_parented(b, config[CONF_MICRADAR_ID])
         cg.add(micradar_component.set_init_progress_query_button(b))
-    if human_query_config := config.get(CONF_HUMAN_PRESENCE_QUERY):
-        b = await button.new_button(human_query_config)
+    if human_presence_query_config := config.get(CONF_HUMAN_PRESENCE_QUERY):
+        b = await button.new_button(human_presence_query_config)
         await cg.register_parented(b, config[CONF_MICRADAR_ID])
         cg.add(micradar_component.set_human_query_button(b))
-    if track_query_config := config.get(CONF_TRACK_INFORMATION_QUERY):
-        b = await button.new_button(track_query_config)
+    if track_information_query_config := config.get(CONF_TRACK_INFORMATION_QUERY):
+        b = await button.new_button(track_information_query_config)
         await cg.register_parented(b, config[CONF_MICRADAR_ID])
         cg.add(micradar_component.set_track_query_button(b))
