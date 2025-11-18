@@ -43,6 +43,7 @@ static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buf
   SUB_BUTTON(init_progress)
   SUB_BUTTON(human_query)
   SUB_BUTTON(track_query)
+ // SUB_BUTTON(track_query)
 #endif
 
 #ifdef USE_TEXT_SENSOR
