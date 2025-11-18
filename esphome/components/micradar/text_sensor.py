@@ -16,6 +16,8 @@ CONF_PRODUCT_MODEL = "product_model"
 CONF_PRODUCT_ID = "product_id"
 CONF_HARDWARE_MODEL = "hardware_model"
 CONF_FIRMWARE_VERSION = "firmware_version"
+CONF_HUMAN_PRESENCE_INFORMATION = "HumanPresenceInformation"
+CONF_NOVEMENT_INFORMATION = "MovementInformation"
 
 CONFIG_SCHEMA = {
     cv.GenerateID(CONF_MICRADAR_ID): cv.use_id(MicradarComponent),
@@ -29,6 +31,12 @@ CONFIG_SCHEMA = {
         entity_category=ENTITY_CATEGORY_DIAGNOSTIC, icon=ICON_CHIP
     ),
     cv.Optional(CONF_FIRMWARE_VERSION): text_sensor.text_sensor_schema(
+        entity_category=ENTITY_CATEGORY_DIAGNOSTIC, icon=ICON_CHIP
+    ),
+    cv.Optional(CONF_HUMAN_PRESENCE_INFORMATION): text_sensor.text_sensor_schema(
+        entity_category=ENTITY_CATEGORY_DIAGNOSTIC, icon=ICON_CHIP
+    ),
+     cv.Optional(CONF_NOVEMENT_INFORMATION): text_sensor.text_sensor_schema(
         entity_category=ENTITY_CATEGORY_DIAGNOSTIC, icon=ICON_CHIP
     ),
     
@@ -49,4 +57,9 @@ async def to_code(config):
     if firmware_version_config := config.get(CONF_FIRMWARE_VERSION):
         sens = await text_sensor.new_text_sensor(firmware_version_config)
         cg.add(micradar_component.set_firmware_version_text_sensor(sens))
-    
+    if human_presence_information_config := config.get(CONF_FIRMWARE_VERSION):
+        sens = await text_sensor.new_text_sensor(human_presence_information_config)
+        cg.add(micradar_component.set_human_presence_information_text_sensor(sens))
+    if movement_information_config := config.get(CONF_FIRMWARE_VERSION):
+        sens = await text_sensor.new_text_sensor(firmware_version_config)
+        cg.add(micradar_component.set_movement_information_text_sensor(sens))

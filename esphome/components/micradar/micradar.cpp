@@ -85,6 +85,10 @@ namespace micradar {
     static constexpr uint8_t CMD_FIRMWARE_PACKAGE_TRANSMISSION_COMPLETED = 0x01;
     static constexpr uint8_t CMD_FIRMWARE_PACKAGE_TRANSMISSION_NOT_COMPLETED = 0x02;
 
+    enum SwitchState : uint8_t {
+        ENABLED = 0x01;
+        DISABLED = 0x02;
+    };
 
     struct Uint8ToString {
         const uint8_t value;
@@ -96,6 +100,10 @@ namespace micradar {
         const uint8_t value;
     };
 
+        constexpr Uint8ToString  SWITCH_BY_UINT[] {
+            {ENABLED, "Enabled"},
+            {DISABLED, "Disabled"}  
+        };
 
     static constexpr uint8_t HEADER_TAIL_SIZE = 2;
 
@@ -150,7 +158,7 @@ namespace micradar {
 
     void MicradarComponent::human_presence_query(){
         this->issue_presence_information_query_();
-        this->issue_presence_information_query_();
+        this->issue_movement_information_query_();
     }
 
      void MicradarComponent::init_progress_query(){
