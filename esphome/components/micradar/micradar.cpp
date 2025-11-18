@@ -157,6 +157,8 @@ namespace micradar {
         {COMPLETED, "Completed"},
         {NOT_COMPLETED, "Not Completed"}  
     };
+
+    
     static constexpr uint8_t HEADER_TAIL_SIZE = 2;
 
     static constexpr uint8_t DATA_FRAME_HEADER[HEADER_TAIL_SIZE] = { 0x53, 0x59 };
@@ -250,7 +252,7 @@ namespace micradar {
                 this->buffer_pos_= 0;
                 return;
             }
-             ESP_LOGV(TAG, "Handling Data: %s sum: %02X ", format_hex_pretty(this->buffer_data_, this->buffer_pos_).c_str(), sum);
+             ESP_LOGV(TAG, "Handling Data: %s", format_hex_pretty(this->buffer_data_, this->buffer_pos_).c_str());
             this->handle_data_();
             this->buffer_pos_ = 0;  // Reset position index for next message
         }
@@ -304,7 +306,7 @@ namespace micradar {
 #ifdef USE_TEXT_SENSOR
                         if (this->product_model_text_sensor_ != nullptr) {
                             product_model_ = ((char*)(this->buffer_data_+6));
-                            ESP_LOGV(TAG, "product model: %s", product_model_.c_str());
+                            ESP_LOGD(TAG, "product model: %s", product_model_.c_str());
                             this->product_model_text_sensor_->publish_state(product_model_);
                         }
 #endif
@@ -313,7 +315,7 @@ namespace micradar {
 #ifdef USE_TEXT_SENSOR
                         if (this->product_id_text_sensor_ != nullptr) {
                             product_id_ = ((char*)(this->buffer_data_+6));
-                            ESP_LOGV(TAG, "product id: %s", product_id_.c_str());
+                            ESP_LOGD(TAG, "product id: %s", product_id_.c_str());
                             this->product_id_text_sensor_->publish_state(product_id_);
                         }
 #endif
@@ -322,7 +324,7 @@ namespace micradar {
 #ifdef USE_TEXT_SENSOR
                         if (this->hardware_model_text_sensor_ != nullptr) {
                             hardware_model_ = ((char*)(this->buffer_data_+6));
-                            ESP_LOGV(TAG, "hardware model: %s", hardware_model_.c_str());
+                            ESP_LOGD(TAG, "hardware model: %s", hardware_model_.c_str());
                             this->hardware_model_text_sensor_->publish_state(hardware_model_);
                         }
 #endif
@@ -331,7 +333,7 @@ namespace micradar {
 #ifdef USE_TEXT_SENSOR
                         if (this->firmware_version_text_sensor_ != nullptr) {
                             firmware_version_ = ((char*)(this->buffer_data_+6));
-                            ESP_LOGV(TAG, "firmware_version: %s", firmware_version_.c_str());
+                            ESP_LOGD(TAG, "firmware_version: %s", firmware_version_.c_str());
                             this->firmware_version_text_sensor_->publish_state(firmware_version_);
                         }
 #endif
@@ -345,7 +347,7 @@ namespace micradar {
                 switch( commandWord ){
                     case CMD_MESSAGE_OF_INITIALIZATION_COMPLETE:
                         init_state = find_str( INIT_STATE_BY_UINT, this->buffer_data_[6]);
-                        ESP_LOGV(TAG, "Initialisation progress: %s", init_state );
+                        ESP_LOGD(TAG, "Initialisation progress: %s", init_state );
                         break;
                     case CMD_UPLOAD_OF_RADAR_FAILURE:
                         break;
@@ -368,29 +370,20 @@ namespace micradar {
                     case CMD_ENABLE_DISABLE_HUMAN_PRESENCE_FUNCTION:
                         break;
                     case CMD_HUMAN_PRESENCE_INFORMATION_REPORT:
-                        human_presence = find_str( HUMAN_PRESENCE_BY_UINT, this->buffer_data_[6]);
-                        ESP_LOGV(TAG, "Human presence: %s", human_presence );
-                        break;
-                    case CMD_MOVEMENT_INFORMATION_REPORT:
-                        movement_info = find_str( MOVEMNENT_STATE_BY_UINT, this->buffer_data_[6]);
-                        ESP_LOGV(TAG, "Movement Info: %s", movement_info );
-                        break;
-                    case CMD_BODY_MOVEMENT_PARAMETER_REPORT:
-                        
-                        ESP_LOGV(TAG, "Movement parameter: %d", this->buffer_data_[6] );
-                        break;
-                    case CMD_HUMAN_PRESENCE_SWITCH_QUERY:
-                        break;
                     case CMD_PRESENCE_INFORMATION_QUERY:
                         human_presence = find_str( HUMAN_PRESENCE_BY_UINT, this->buffer_data_[6]);
-                        ESP_LOGV(TAG, "Human presence: %s", human_presence );
+                        ESP_LOGD(TAG, "Human presence: %s", human_presence );
                         break;
+                    case CMD_MOVEMENT_INFORMATION_REPORT:
                     case CMD_MOVEMENT_INFORMATION_QUERY:
                         movement_info = find_str( MOVEMNENT_STATE_BY_UINT, this->buffer_data_[6]);
-                        ESP_LOGV(TAG, "Movement Info: %s", movement_info );
+                        ESP_LOGD(TAG, "Movement Info: %s", movement_info );
                         break;
-                    case CMD_BODY_MOVEMENT_PARAMETER_QUERY:
-                         ESP_LOGV(TAG, "Movement parameter: %c", this->buffer_data_[6] );
+                    case CMD_BODY_MOVEMENT_PARAMETER_REPORT:
+                    case CMD_BODY_MOVEMENT_PARAMETER_QUERY:    
+                        ESP_LOGD(TAG, "Movement parameter: %d", this->buffer_data_[6] );
+                        break;
+                    case CMD_HUMAN_PRESENCE_SWITCH_QUERY:
                         break;
                     default:
                         ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
@@ -400,8 +393,20 @@ namespace micradar {
             case CTRL_TRACK_FUNCTION:
                 switch( commandWord ){
                     case CMD_TRACK_INFORMATION:
-                        break;
                     case CMD_TRACK_INFORMATION_QUERY:
+                        num_targets_ = dataLength/sizeof(Target);
+                        for( int pos = 0; pos < num_targets_; pos++ ){
+                            targets_[pos].index = buffer_data_ + 6 + pos * sizeof(Target);
+                            targets_[pos].size = buffer_data_+ 7 + pos * sizeof(Target);
+                            targets_[pos].characteristics = buffer_data_ + 8 + pos * sizeof(Target);
+                            targets_[pos].x = two_byte_to_int(buffer_data_ + 9 + pos * sizeof(Target), buffer_data_ + 10 + pos * sizeof(Target));
+                            targets_[pos].y = two_byte_to_int(buffer_data_ + 11 + pos * sizeof(Target), buffer_data_ + 12 + pos * sizeof(Target));
+                            targets_[pos].height = two_byte_to_int(buffer_data_ + 13 + pos * sizeof(Target), buffer_data_ + 14 + pos * sizeof(Target));
+                            targets_[pos].velocity = two_byte_to_int(buffer_data_ + 15 + pos * sizeof(Target), buffer_data_ + 16 + pos * sizeof(Target));
+                            ESP_LOGD(TAG, "Tracking info: Index: %d size: %d characteristics: %d x: %d y: %d height: %d velocity: %d", 
+                                    targets_[pos].index, targets_[pos].size, targets_[pos].characteristics, 
+                                    targets_[pos].x, targets_[pos].y, targets_[pos].height, targets_[pos].velocity);
+                        }
                         break;
                     case CMD_INITIALIZATION_PROGRESS_QUERY:
                         break;
@@ -427,7 +432,7 @@ namespace micradar {
             case CTRL_SHUTDOWN:
                 switch( commandWord ){
                     case CMD_SHUTDOWN_COMPLETED:
-                        ESP_LOGW(TAG, "shutdown completed");
+                        ESP_LOGD(TAG, "shutdown completed");
                         break;
                     default:
                         ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);

@@ -32,6 +32,17 @@
 namespace esphome {
 namespace micradar {
 
+struct Target {
+        uint8_t index;
+        uint8_t size;
+        uint8_t characteristics;
+        int16_t x;
+        int16_t y;
+        int16_t height;
+        int16_t velocity;
+    };
+
+
 class MicradarComponent : public Component, public uart::UARTDevice {
 static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buffer
 
@@ -75,6 +86,8 @@ static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buf
   std::string product_id_;
   std::string hardware_model_;
   std::string firmware_version_;
+  uint8_t num_targets_;
+  Target targets_[3];
   
   uint8_t checkDigit_( uint8_t *buf, uint16_t len);
   void issue_data_( uint8_t control, uint8_t command, uint8_t *bytes, uint16_t len );
