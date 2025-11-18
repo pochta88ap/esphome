@@ -157,7 +157,7 @@ namespace micradar {
         this->issue_initialization_progress_query_();
      }
 
-     void  void MicradarComponent::track_query(){
+     void MicradarComponent::track_query(){
         this->issue_track_information_query_();
      }
 
