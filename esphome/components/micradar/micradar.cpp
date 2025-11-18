@@ -85,6 +85,16 @@ namespace micradar {
     static constexpr uint8_t CMD_FIRMWARE_PACKAGE_TRANSMISSION_COMPLETED = 0x01;
     static constexpr uint8_t CMD_FIRMWARE_PACKAGE_TRANSMISSION_NOT_COMPLETED = 0x02;
 
+    struct Uint8ToString {
+        const uint8_t value;
+        const char *str;
+    };
+
+    struct StringToUint8 {
+        const char *str;
+        const uint8_t value;
+    };
+
     // Helper functions for lookups
     template<size_t N> uint8_t find_uint8(const StringToUint8 (&arr)[N], const char *str) {
     for (const auto &entry : arr) {
@@ -125,15 +135,7 @@ namespace micradar {
 
 
 
-    struct Uint8ToString {
-        const uint8_t value;
-        const char *str;
-    };
-
-    struct StringToUint8 {
-        const char *str;
-        const uint8_t value;
-    };
+    
 
     constexpr Uint8ToString  SWITCH_BY_UINT[] {
         {ENABLED, "Enabled"},
