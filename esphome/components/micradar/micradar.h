@@ -51,6 +51,8 @@ static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buf
   SUB_TEXT_SENSOR(product_id)
   SUB_TEXT_SENSOR(hardware_model)
   SUB_TEXT_SENSOR(firmware_version)
+  SUB_TEXT_SENSOR(human_presence_information)
+  SUB_TEXT_SENSOR(movement_information)
 #endif
 
  public:

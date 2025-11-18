@@ -48,18 +48,23 @@ async def to_code(config):
     if product_model_config := config.get(CONF_PRODUCT_MODEL):
         sens = await text_sensor.new_text_sensor(product_model_config)
         cg.add(micradar_component.set_product_model_text_sensor(sens))
+        
     if product_id_config := config.get(CONF_PRODUCT_ID):
         sens = await text_sensor.new_text_sensor(product_id_config)
         cg.add(micradar_component.set_product_id_text_sensor(sens))
+
     if hardware_model_config := config.get(CONF_HARDWARE_MODEL):
         sens = await text_sensor.new_text_sensor(hardware_model_config)
         cg.add(micradar_component.set_hardware_model_text_sensor(sens))
+
     if firmware_version_config := config.get(CONF_FIRMWARE_VERSION):
         sens = await text_sensor.new_text_sensor(firmware_version_config)
         cg.add(micradar_component.set_firmware_version_text_sensor(sens))
+
     if human_presence_information_config := config.get(CONF_FIRMWARE_VERSION):
         sens = await text_sensor.new_text_sensor(human_presence_information_config)
         cg.add(micradar_component.set_human_presence_information_text_sensor(sens))
+
     if movement_information_config := config.get(CONF_FIRMWARE_VERSION):
         sens = await text_sensor.new_text_sensor(movement_information_config)
         cg.add(micradar_component.set_movement_information_text_sensor(sens))
