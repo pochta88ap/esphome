@@ -71,7 +71,7 @@ async def to_code(config):
     if init_progress_query_config := config.get(CONF_INITIALIZATION_PROGRESS_QUERY):
         b = await button.new_button(init_progress_query_config)
         await cg.register_parented(b, config[CONF_MICRADAR_ID])
-        cg.add(micradar_component.set_init_progress_query_button(b))
+        cg.add(micradar_component.set_init_progress_button(b))
     if human_presence_query_config := config.get(CONF_HUMAN_PRESENCE_QUERY):
         b = await button.new_button(human_presence_query_config)
         await cg.register_parented(b, config[CONF_MICRADAR_ID])
