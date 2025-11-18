@@ -61,5 +61,5 @@ async def to_code(config):
         sens = await text_sensor.new_text_sensor(human_presence_information_config)
         cg.add(micradar_component.set_human_presence_information_text_sensor(sens))
     if movement_information_config := config.get(CONF_FIRMWARE_VERSION):
-        sens = await text_sensor.new_text_sensor(firmware_version_config)
+        sens = await text_sensor.new_text_sensor(movement_information_config)
         cg.add(micradar_component.set_movement_information_text_sensor(sens))
