@@ -140,7 +140,7 @@ namespace micradar {
         this->issue_firmware_version_query_();
         this->issue_body_movement_parameter_query_();
         this->issue_human_presence_switch_query_();
-        this->issue_body_movement_parameter_query_()
+        this->issue_body_movement_parameter_query_();
     }
 
     void MicradarComponent::restart_and_read_all_info(){
@@ -150,7 +150,7 @@ namespace micradar {
 
     void MicradarComponent::human_presence_query(){
         this->issue_presence_information_query_();
-        this->issue_presence_information_query_()
+        this->issue_presence_information_query_();
     }
 
      void MicradarComponent::init_progress_query(){
