@@ -20,7 +20,8 @@ namespace micradar {
     static constexpr uint8_t SHIFT_CONTROL_WORD = 0x02;
     static constexpr uint8_t SHIFT_COMMAND_WORD = 0x03;
     static constexpr uint8_t SHIFT_DATA_LENGTH_WORD = 0x04;
-    static constexpr uint8_t SHIFT_DATA = 0x05;
+    static constexpr uint8_t SHIFT_DATA = 0x06;
+    static constexpr uint8_t TRACK_DATA_LENGTH = 11;
     // Contfol words
     static constexpr uint8_t CTRL_SYSTEM_FUNCTIONS = 0x01;
     static constexpr uint8_t CTRL_PRODUCT_INFO = 0x02;
@@ -164,7 +165,7 @@ namespace micradar {
     static constexpr uint8_t DATA_FRAME_HEADER[HEADER_TAIL_SIZE] = { 0x53, 0x59 };
     static constexpr uint8_t DATA_FRAME_TAIL[HEADER_TAIL_SIZE] = { 0x54, 0x43 };
 
-    static inline int two_byte_to_int(char firstbyte, char secondbyte) { return (int16_t) (secondbyte << 8) + firstbyte; }
+    static inline int two_byte_to_int(char firstbyte, char secondbyte) { return (int16_t) (firstbyte << 8) + secondbyte; }
     static inline uint8_t lobyte( uint16_t word ) { return (uint8_t) 0xff & word; }
     static inline uint8_t hibyte( uint16_t word ) { return (uint8_t) ( ( 0xff00 & word )>>8 ); }
 
@@ -284,7 +285,7 @@ namespace micradar {
 
         uint8_t controlWord = this->buffer_data_[SHIFT_CONTROL_WORD];
         uint8_t commandWord = this->buffer_data_[SHIFT_COMMAND_WORD];
-        uint8_t dataLength  = this->buffer_data_[SHIFT_DATA_LENGTH_WORD];
+        uint16_t dataLength  = two_byte_to_int( this->buffer_data_[SHIFT_DATA_LENGTH_WORD], this->buffer_data_[SHIFT_DATA_LENGTH_WORD+1]);
         const char *init_state;
         const char *human_presence;
         const char *movement_info;
@@ -323,7 +324,7 @@ namespace micradar {
                     case CMD_HARDWARE_MODEL_QUERY:
 #ifdef USE_TEXT_SENSOR
                         if (this->hardware_model_text_sensor_ != nullptr) {
-                            hardware_model_ = ((char*)(this->buffer_data_+6));
+                            hardware_model_ = ((char*)(this->buffer_data_+SHIFT_DATA));
                             ESP_LOGD(TAG, "hardware model: %s", hardware_model_.c_str());
                             this->hardware_model_text_sensor_->publish_state(hardware_model_);
                         }
@@ -332,7 +333,7 @@ namespace micradar {
                     case CMD_FIRMWARE_VERSION_QUERY:
 #ifdef USE_TEXT_SENSOR
                         if (this->firmware_version_text_sensor_ != nullptr) {
-                            firmware_version_ = ((char*)(this->buffer_data_+6));
+                            firmware_version_ = ((char*)(this->buffer_data_+SHIFT_DATA));
                             ESP_LOGD(TAG, "firmware_version: %s", firmware_version_.c_str());
                             this->firmware_version_text_sensor_->publish_state(firmware_version_);
                         }
@@ -346,7 +347,7 @@ namespace micradar {
             case CTRL_WORKING_STATUS:
                 switch( commandWord ){
                     case CMD_MESSAGE_OF_INITIALIZATION_COMPLETE:
-                        init_state = find_str( INIT_STATE_BY_UINT, this->buffer_data_[6]);
+                        init_state = find_str( INIT_STATE_BY_UINT, this->buffer_data_[SHIFT_DATA]);
                         ESP_LOGD(TAG, "Initialisation progress: %s", init_state );
                         break;
                     case CMD_UPLOAD_OF_RADAR_FAILURE:
@@ -371,17 +372,17 @@ namespace micradar {
                         break;
                     case CMD_HUMAN_PRESENCE_INFORMATION_REPORT:
                     case CMD_PRESENCE_INFORMATION_QUERY:
-                        human_presence = find_str( HUMAN_PRESENCE_BY_UINT, this->buffer_data_[6]);
+                        human_presence = find_str( HUMAN_PRESENCE_BY_UINT, this->buffer_data_[SHIFT_DATA]);
                         ESP_LOGD(TAG, "Human presence: %s", human_presence );
                         break;
                     case CMD_MOVEMENT_INFORMATION_REPORT:
                     case CMD_MOVEMENT_INFORMATION_QUERY:
-                        movement_info = find_str( MOVEMNENT_STATE_BY_UINT, this->buffer_data_[6]);
+                        movement_info = find_str( MOVEMNENT_STATE_BY_UINT, this->buffer_data_[SHIFT_DATA]);
                         ESP_LOGD(TAG, "Movement Info: %s", movement_info );
                         break;
                     case CMD_BODY_MOVEMENT_PARAMETER_REPORT:
                     case CMD_BODY_MOVEMENT_PARAMETER_QUERY:    
-                        ESP_LOGD(TAG, "Movement parameter: %d", this->buffer_data_[6] );
+                        ESP_LOGD(TAG, "Movement parameter: %d", this->buffer_data_[SHIFT_DATA] );
                         break;
                     case CMD_HUMAN_PRESENCE_SWITCH_QUERY:
                         break;
@@ -394,16 +395,17 @@ namespace micradar {
                 switch( commandWord ){
                     case CMD_TRACK_INFORMATION:
                     case CMD_TRACK_INFORMATION_QUERY:
-                        num_targets_ = dataLength/sizeof(Target);
+                        num_targets_ = dataLength/TRACK_DATA_LENGTH;
+                        ESP_LOGV(TAG, "targets: %d ", num_targets_ );
                         for( int pos = 0; pos < num_targets_; pos++ ){
-                            targets_[pos].index = buffer_data_ + 6 + pos * sizeof(Target);
-                            targets_[pos].size = buffer_data_+ 7 + pos * sizeof(Target);
-                            targets_[pos].characteristics = buffer_data_ + 8 + pos * sizeof(Target);
-                            targets_[pos].x = two_byte_to_int(buffer_data_ + 9 + pos * sizeof(Target), buffer_data_ + 10 + pos * sizeof(Target));
-                            targets_[pos].y = two_byte_to_int(buffer_data_ + 11 + pos * sizeof(Target), buffer_data_ + 12 + pos * sizeof(Target));
-                            targets_[pos].height = two_byte_to_int(buffer_data_ + 13 + pos * sizeof(Target), buffer_data_ + 14 + pos * sizeof(Target));
-                            targets_[pos].velocity = two_byte_to_int(buffer_data_ + 15 + pos * sizeof(Target), buffer_data_ + 16 + pos * sizeof(Target));
-                            ESP_LOGD(TAG, "Tracking info: Index: %d size: %d characteristics: %d x: %d y: %d height: %d velocity: %d", 
+                            targets_[pos].index = buffer_data_[6 + pos * TRACK_DATA_LENGTH];
+                            targets_[pos].size = buffer_data_[7 + pos * TRACK_DATA_LENGTH];
+                            targets_[pos].characteristics = buffer_data_[8 + pos * TRACK_DATA_LENGTH];
+                            targets_[pos].x = two_byte_to_int(buffer_data_[9 + pos * TRACK_DATA_LENGTH], buffer_data_[10 + pos *TRACK_DATA_LENGTH]);
+                            targets_[pos].y = two_byte_to_int(buffer_data_[11 + pos * TRACK_DATA_LENGTH], buffer_data_[12 + pos * TRACK_DATA_LENGTH]);
+                            targets_[pos].height = two_byte_to_int(buffer_data_[13 + pos *TRACK_DATA_LENGTH], buffer_data_[14 + pos * TRACK_DATA_LENGTH]);
+                            targets_[pos].velocity = two_byte_to_int(buffer_data_[15 + pos *TRACK_DATA_LENGTH], buffer_data_[16 + pos * TRACK_DATA_LENGTH]);
+                            ESP_LOGV(TAG, "Tracking info: Index: %d size: %d characteristics: %d x: %d y: %d height: %d velocity: %d", 
                                     targets_[pos].index, targets_[pos].size, targets_[pos].characteristics, 
                                     targets_[pos].x, targets_[pos].y, targets_[pos].height, targets_[pos].velocity);
                         }
