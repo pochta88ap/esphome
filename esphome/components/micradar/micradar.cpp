@@ -85,10 +85,28 @@ namespace micradar {
     static constexpr uint8_t CMD_FIRMWARE_PACKAGE_TRANSMISSION_COMPLETED = 0x01;
     static constexpr uint8_t CMD_FIRMWARE_PACKAGE_TRANSMISSION_NOT_COMPLETED = 0x02;
 
+    enum InitializationProgress : uint8_t {
+        COMPLETED = 0x01;
+        NOT_COMPLETED = 0x00;
+    };
+
+    enum HumanPresence : uint8_t {
+        NON_PRESENCE = 0x00;
+        PRESENCE = 0x01;
+    };
+
+    enum MovementSate : uint8_t {
+        NO = 0x00;
+        STATIC = 0x01;
+        ACTIVE = 0X02;
+    };
+
     enum SwitchState : uint8_t {
         ENABLED = 0x01;
-        DISABLED = 0x02;
+        DISABLED = 0x00;
     };
+
+
 
     struct Uint8ToString {
         const uint8_t value;
@@ -100,11 +118,26 @@ namespace micradar {
         const uint8_t value;
     };
 
-        constexpr Uint8ToString  SWITCH_BY_UINT[] {
-            {ENABLED, "Enabled"},
-            {DISABLED, "Disabled"}  
-        };
+    constexpr Uint8ToString  SWITCH_BY_UINT[] {
+        {ENABLED, "Enabled"},
+        {DISABLED, "Disabled"}  
+    };
 
+    constexpr Uint8ToString  MOVEMNENT_STATE_BY_UINT[] {
+        {NO, "No"},
+        {STATIC, "Static"},
+        {ACTIVE, "Active"}    
+    };
+
+    constexpr Uint8ToString  HUMAN_PRESENCE_BY_UINT[] {
+        {NOT_PRESENCE, "Not Presence"},
+        {PRESENCE, "Presence"}  
+    };
+    
+    constexpr Uint8ToString  INIT_STATE_BY_UINT[] {
+        {COMPLETED, "Completed"},
+        {NOT_COMPLETED, "Not Completed"}  
+    };
     static constexpr uint8_t HEADER_TAIL_SIZE = 2;
 
     static constexpr uint8_t DATA_FRAME_HEADER[HEADER_TAIL_SIZE] = { 0x53, 0x59 };
@@ -146,9 +179,8 @@ namespace micradar {
         this->issue_product_id_query_();
         this->issue_hardware_model_query_();
         this->issue_firmware_version_query_();
-        this->issue_body_movement_parameter_query_();
         this->issue_human_presence_switch_query_();
-        this->issue_body_movement_parameter_query_();
+        
     }
 
     void MicradarComponent::restart_and_read_all_info(){
@@ -159,6 +191,7 @@ namespace micradar {
     void MicradarComponent::human_presence_query(){
         this->issue_presence_information_query_();
         this->issue_movement_information_query_();
+        this->issue_body_movement_parameter_query_();
     }
 
      void MicradarComponent::init_progress_query(){
