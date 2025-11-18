@@ -91,7 +91,7 @@ namespace micradar {
     };
 
     enum HumanPresence : uint8_t {
-        NON_PRESENCE = 0x00,
+        NOT_PRESENCE = 0x00,
         PRESENCE = 0x01
     };
 
