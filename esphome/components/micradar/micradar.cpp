@@ -139,12 +139,27 @@ namespace micradar {
         this->issue_hardware_model_query_();
         this->issue_firmware_version_query_();
         this->issue_body_movement_parameter_query_();
+        this->issue_human_presence_switch_query_();
+        this->issue_body_movement_parameter_query_()
     }
 
     void MicradarComponent::restart_and_read_all_info(){
         this->issue_module_reset_();
         this->read_all_info();
     }
+
+    void MicradarComponent::human_presence_query(){
+        this->issue_presence_information_query_();
+        this->issue_presence_information_query_()
+    }
+
+     void MicradarComponent::init_progress_query(){
+        this->issue_initialization_progress_query_();
+     }
+
+     void  void MicradarComponent::track_query(){
+        this->issue_track_information_query_();
+     }
 
 
     void MicradarComponent::loop() {

@@ -60,6 +60,9 @@ static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buf
 
   void read_all_info();
   void restart_and_read_all_info();
+  void human_presence_query();
+  void init_progress_query();
+  void track_query();
 
  protected:
   void readline_(int readch);
