@@ -86,24 +86,24 @@ namespace micradar {
     static constexpr uint8_t CMD_FIRMWARE_PACKAGE_TRANSMISSION_NOT_COMPLETED = 0x02;
 
     enum InitializationProgress : uint8_t {
-        COMPLETED = 0x01;
-        NOT_COMPLETED = 0x00;
+        COMPLETED = 0x01,
+        NOT_COMPLETED = 0x00
     };
 
     enum HumanPresence : uint8_t {
-        NON_PRESENCE = 0x00;
-        PRESENCE = 0x01;
+        NON_PRESENCE = 0x00,
+        PRESENCE = 0x01
     };
 
     enum MovementSate : uint8_t {
-        NO = 0x00;
-        STATIC = 0x01;
-        ACTIVE = 0X02;
+        NO = 0x00,
+        STATIC = 0x01,
+        ACTIVE = 0X02
     };
 
     enum SwitchState : uint8_t {
-        ENABLED = 0x01;
-        DISABLED = 0x00;
+        ENABLED = 0x01,
+        DISABLED = 0x00
     };
 
 
