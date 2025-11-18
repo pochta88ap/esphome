@@ -285,7 +285,7 @@ namespace micradar {
         uint8_t dataLength  = this->buffer_data_[SHIFT_DATA_LENGTH_WORD];
         const char *init_state;
         const char *human_presence;
-        const char *movement_info
+        const char *movement_info;
         switch( controlWord ){
             case CTRL_SYSTEM_FUNCTIONS:
                 switch( commandWord ){
