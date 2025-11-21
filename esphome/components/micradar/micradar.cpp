@@ -320,8 +320,8 @@ namespace micradar {
 #ifdef USE_TEXT_SENSOR
                         if (this->product_model_text_sensor_ != nullptr) {
                             product_model_ = ((char*)(this->buffer_data_+6));
-                            ESP_LOGD(TAG, "product model: %s", product_model_.c_str());
                             this->product_model_text_sensor_->publish_state(product_model_);
+                            ESP_LOGD(TAG, "product model: %s", product_model_.c_str());
                         }
 #endif
                         break;
@@ -329,8 +329,9 @@ namespace micradar {
 #ifdef USE_TEXT_SENSOR
                         if (this->product_id_text_sensor_ != nullptr) {
                             product_id_ = ((char*)(this->buffer_data_+6));
-                            ESP_LOGD(TAG, "product id: %s", product_id_.c_str());
+                            
                             this->product_id_text_sensor_->publish_state(product_id_);
+                            ESP_LOGD(TAG, "product id: %s", product_id_.c_str());
                         }
 #endif
                         break;
@@ -338,8 +339,9 @@ namespace micradar {
 #ifdef USE_TEXT_SENSOR
                         if (this->hardware_model_text_sensor_ != nullptr) {
                             hardware_model_ = ((char*)(this->buffer_data_+SHIFT_DATA));
-                            ESP_LOGD(TAG, "hardware model: %s", hardware_model_.c_str());
+                            |
                             this->hardware_model_text_sensor_->publish_state(hardware_model_);
+                            ESP_LOGD(TAG, "hardware model: %s", hardware_model_.c_str());
                         }
 #endif
                         break;
@@ -347,8 +349,9 @@ namespace micradar {
 #ifdef USE_TEXT_SENSOR
                         if (this->firmware_version_text_sensor_ != nullptr) {
                             firmware_version_ = ((char*)(this->buffer_data_+SHIFT_DATA));
-                            ESP_LOGD(TAG, "firmware_version: %s", firmware_version_.c_str());
+                            
                             this->firmware_version_text_sensor_->publish_state(firmware_version_);
+                            ESP_LOGD(TAG, "firmware_version: %s", firmware_version_.c_str());
                         }
 #endif
                         break;
