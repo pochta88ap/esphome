@@ -442,7 +442,7 @@ namespace micradar {
                                     targets_[pos].index, targets_[pos].size, targets_[pos].characteristics, 
                                     targets_[pos].x, targets_[pos].y, targets_[pos].height, targets_[pos].velocity);
                         }
-                        for( int pos = num_targets_-1; pos < MAX_TARGETS; pos++ ){
+                        for( int pos = num_targets_; pos < MAX_TARGETS; pos++ ){
                             targets_[pos].index = pos + 1;
                             targets_[pos].size = 0;
                             targets_[pos].characteristics = 0;
