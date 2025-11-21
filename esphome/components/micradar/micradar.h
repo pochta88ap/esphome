@@ -22,7 +22,7 @@
 #ifdef USE_TEXT_SENSOR
 #include "esphome/components/text_sensor/text_sensor.h"
 #endif
-//#include "esphome/components/ld24xx/ld24xx.h"
+#include "esphome/components/ld24xx/ld24xx.h"
 #include "esphome/components/uart/uart.h"
 #include "esphome/core/automation.h"
 #include "esphome/core/helpers.h"
@@ -31,7 +31,7 @@
 
 namespace esphome {
 namespace micradar {
-
+using namespace ld24xx;
 struct Target {
         uint8_t index;
         uint8_t size;
@@ -44,7 +44,8 @@ struct Target {
 
 
 class MicradarComponent : public Component, public uart::UARTDevice {
-static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buffer
+static constexpr uint8_t MAX_LINE_LENGTH = 100;  // Max characters for serial buffer
+static constexpr uint8_t MAX_TARGETS = 3;
 
 
 #ifdef USE_BUTTON
@@ -66,6 +67,22 @@ static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buf
   SUB_TEXT_SENSOR(movement_information)
 #endif
 
+#ifdef USE_SWITCH
+  SUB_SWITCH(human_presence_function)
+#endif
+
+#ifdef USE_BINARY_SENSOR
+  SUB_BINARY_SENSOR(moving_target)
+  SUB_BINARY_SENSOR(still_target)
+  SUB_BINARY_SENSOR(target)
+#endif
+
+#ifdef USE_SENSOR
+  
+  SUB_SENSOR_WITH_DEDUP(moving_target_energy, uint8_t)
+  
+#endif
+
  public:
   void setup() override;
   void dump_config() override;
@@ -76,7 +93,12 @@ static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buf
   void human_presence_query();
   void init_progress_query();
   void track_query();
-
+  void set_human_presence_function( bool );
+#ifdef USE_SENSOR
+  void set_x_coord_sensor(uint8_t target, sensor::Sensor *s);
+  void set_y_coord_sensor(uint8_t target, sensor::Sensor *s);
+  void set_move_energy_sensor(uint8_t target, sensor::Sensor *s);
+#endif
  protected:
   void readline_(int readch);
 
@@ -112,7 +134,11 @@ static constexpr uint8_t MAX_LINE_LENGTH = 46;  // Max characters for serial buf
   void issue_stop_OTA_upgrade_( uint8_t value );
 
 
-
+#ifdef USE_SENSOR
+  std::array<SensorWithDedup<int16_t> *, MAX_TARGETS> x_coord_sensors_{};
+  std::array<SensorWithDedup<int16_t> *, MAX_TARGETS> y_coord_sensors_{};
+  std::array<SensorWithDedup<uint8_t> *, MAX_TARGETS> move_energy_sensors_{};
+#endif
 };
 }
 }

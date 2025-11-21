@@ -166,6 +166,7 @@ namespace micradar {
     static constexpr uint8_t DATA_FRAME_TAIL[HEADER_TAIL_SIZE] = { 0x54, 0x43 };
 
     static inline int two_byte_to_int(char firstbyte, char secondbyte) { return (int16_t) (firstbyte << 8) + secondbyte; }
+    static inline int two_byte_to_signed_int(char firstbyte, char secondbyte) { return (int16_t) ( 0x80 & firstbyte ? -1 : 1) * (((0x7f & firstbyte) << 8) + secondbyte); }
     static inline uint8_t lobyte( uint16_t word ) { return (uint8_t) 0xff & word; }
     static inline uint8_t hibyte( uint16_t word ) { return (uint8_t) ( ( 0xff00 & word )>>8 ); }
 
@@ -189,11 +190,18 @@ namespace micradar {
   LOG_TEXT_SENSOR("  ", "Firmware Version", this->firmware_version_text_sensor_);
 #endif
 
+#ifdef USE_BINARY_SENSOR
+  ESP_LOGCONFIG(TAG, "Binary Sensors:");
+  LOG_BINARY_SENSOR("  ", "Target", this->target_binary_sensor_);
+  LOG_BINARY_SENSOR("  ", "MovingTarget", this->moving_target_binary_sensor_);
+  LOG_BINARY_SENSOR("  ", "StillTarget", this->still_target_binary_sensor_);
+#endif
+
     }
 
     void MicradarComponent::setup() { 
         ESP_LOGCONFIG(TAG, "Running setup");
-    //    this->read_all_info();
+        this->read_all_info();
      }
 
     void MicradarComponent::read_all_info(){
@@ -202,6 +210,7 @@ namespace micradar {
         this->issue_hardware_model_query_();
         this->issue_firmware_version_query_();
         this->issue_human_presence_switch_query_();
+        this->human_presence_query();
         
     }
 
@@ -222,6 +231,10 @@ namespace micradar {
 
      void MicradarComponent::track_query(){
         this->issue_track_information_query_();
+     }
+
+     void MicradarComponent::set_human_presence_function( bool state){
+        this->issue_enable_human_presence_function_( state? 1:0 );
      }
 
 
@@ -372,19 +385,35 @@ namespace micradar {
                         break;
                     case CMD_HUMAN_PRESENCE_INFORMATION_REPORT:
                     case CMD_PRESENCE_INFORMATION_QUERY:
+                        if (this->target_binary_sensor_ != nullptr) {
+                            this->target_binary_sensor_->publish_state(this->buffer_data_[SHIFT_DATA] != 0x00);
+                        }
                         human_presence = find_str( HUMAN_PRESENCE_BY_UINT, this->buffer_data_[SHIFT_DATA]);
                         ESP_LOGD(TAG, "Human presence: %s", human_presence );
                         break;
                     case CMD_MOVEMENT_INFORMATION_REPORT:
                     case CMD_MOVEMENT_INFORMATION_QUERY:
+                        if (this->moving_target_binary_sensor_ != nullptr) {
+                            this->moving_target_binary_sensor_->publish_state(this->buffer_data_[SHIFT_DATA] == 0x02);
+                        }
+                        if (this->still_target_binary_sensor_ != nullptr) {
+                            this->still_target_binary_sensor_->publish_state(this->buffer_data_[SHIFT_DATA] == 0x01);
+                        }
+
                         movement_info = find_str( MOVEMNENT_STATE_BY_UINT, this->buffer_data_[SHIFT_DATA]);
                         ESP_LOGD(TAG, "Movement Info: %s", movement_info );
                         break;
                     case CMD_BODY_MOVEMENT_PARAMETER_REPORT:
-                    case CMD_BODY_MOVEMENT_PARAMETER_QUERY:    
+                    case CMD_BODY_MOVEMENT_PARAMETER_QUERY:
+#ifdef USE_SENSOR
+                            SAFE_PUBLISH_SENSOR(this->moving_target_energy_sensor_, this->buffer_data_[SHIFT_DATA])
+#endif
                         ESP_LOGD(TAG, "Movement parameter: %d", this->buffer_data_[SHIFT_DATA] );
                         break;
                     case CMD_HUMAN_PRESENCE_SWITCH_QUERY:
+                        if( this->human_presence_function_switch_ != nullptr) {
+                             this->human_presence_function_switch_->publish_state(this->buffer_data_[SHIFT_DATA] != 0 );
+                        }
                         break;
                     default:
                         ESP_LOGW(TAG, "control word %02X unknown command %02X", controlWord, commandWord);
@@ -401,13 +430,29 @@ namespace micradar {
                             targets_[pos].index = buffer_data_[6 + pos * TRACK_DATA_LENGTH];
                             targets_[pos].size = buffer_data_[7 + pos * TRACK_DATA_LENGTH];
                             targets_[pos].characteristics = buffer_data_[8 + pos * TRACK_DATA_LENGTH];
-                            targets_[pos].x = two_byte_to_int(buffer_data_[9 + pos * TRACK_DATA_LENGTH], buffer_data_[10 + pos *TRACK_DATA_LENGTH]);
-                            targets_[pos].y = two_byte_to_int(buffer_data_[11 + pos * TRACK_DATA_LENGTH], buffer_data_[12 + pos * TRACK_DATA_LENGTH]);
-                            targets_[pos].height = two_byte_to_int(buffer_data_[13 + pos *TRACK_DATA_LENGTH], buffer_data_[14 + pos * TRACK_DATA_LENGTH]);
-                            targets_[pos].velocity = two_byte_to_int(buffer_data_[15 + pos *TRACK_DATA_LENGTH], buffer_data_[16 + pos * TRACK_DATA_LENGTH]);
-                            ESP_LOGV(TAG, "Tracking info: Index: %d size: %d characteristics: %d x: %d y: %d height: %d velocity: %d", 
+                            targets_[pos].x = two_byte_to_signed_int(buffer_data_[9 + pos * TRACK_DATA_LENGTH], buffer_data_[10 + pos *TRACK_DATA_LENGTH]);
+                            targets_[pos].y = two_byte_to_signed_int(buffer_data_[11 + pos * TRACK_DATA_LENGTH], buffer_data_[12 + pos * TRACK_DATA_LENGTH]);
+                            targets_[pos].height = two_byte_to_signed_int(buffer_data_[13 + pos *TRACK_DATA_LENGTH], buffer_data_[14 + pos * TRACK_DATA_LENGTH]);
+                            targets_[pos].velocity = two_byte_to_signed_int(buffer_data_[15 + pos *TRACK_DATA_LENGTH], buffer_data_[16 + pos * TRACK_DATA_LENGTH]);
+                            SAFE_PUBLISH_SENSOR(this->x_coord_sensors_[pos], targets_[pos].x);
+                            SAFE_PUBLISH_SENSOR(this->y_coord_sensors_[pos], targets_[pos].y);
+                            SAFE_PUBLISH_SENSOR(this->move_energy_sensors_[pos], targets_[pos].size);
+                            ESP_LOGD(TAG, "Tracking info: Index: %d size: %d characteristics: %d x: %d y: %d height: %d velocity: %d", 
                                     targets_[pos].index, targets_[pos].size, targets_[pos].characteristics, 
                                     targets_[pos].x, targets_[pos].y, targets_[pos].height, targets_[pos].velocity);
+                        }
+                        for( int pos = num_targets_-1; pos < MAX_TARGETS; pos++ ){
+                            targets_[pos].index = pos + 1;
+                            targets_[pos].size = 0;
+                            targets_[pos].characteristics = 0;
+                            targets_[pos].x = 0;
+                            targets_[pos].y = 0;
+                            targets_[pos].height = 0;
+                            targets_[pos].velocity = 0;
+                            SAFE_PUBLISH_SENSOR(this->x_coord_sensors_[pos], targets_[pos].x);
+                            SAFE_PUBLISH_SENSOR(this->y_coord_sensors_[pos], targets_[pos].y);
+                            SAFE_PUBLISH_SENSOR(this->move_energy_sensors_[pos], targets_[pos].size);
+                           
                         }
                         break;
                     case CMD_INITIALIZATION_PROGRESS_QUERY:
@@ -481,9 +526,9 @@ namespace micradar {
         this->issue_data_( CTRL_WORKING_STATUS, CMD_INITIALIZATION_PROGRESS_QUERY, &buf, sizeof( buf) );
     }
 
-    void MicradarComponent::issue_enable_human_presence_function_( uint8_t value ){
-        
-        this->issue_data_( CTRL_HUMAN_PRESENCE_FUNCTION, CMD_ENABLE_DISABLE_HUMAN_PRESENCE_FUNCTION, &value, sizeof( value ) );
+    void MicradarComponent::issue_enable_human_presence_function_( uint8_t state ){
+         
+        this->issue_data_( CTRL_HUMAN_PRESENCE_FUNCTION, CMD_ENABLE_DISABLE_HUMAN_PRESENCE_FUNCTION, &state, 1 );
     }
 
     void MicradarComponent::issue_human_presence_switch_query_(){
@@ -511,6 +556,20 @@ namespace micradar {
     void MicradarComponent::issue_stop_OTA_upgrade_( uint8_t value ){
         this->issue_data_( CTRL_OTA, CMD_STOP_OTA_UPGRADE, &value, sizeof( value) );
     }
+
+#ifdef USE_SENSOR
+// These could leak memory, but they are only set once prior to 'setup()' and should never be used again.
+    void MicradarComponent::set_move_energy_sensor(uint8_t target, sensor::Sensor *s) {
+  this->move_energy_sensors_[target] = new SensorWithDedup<uint8_t>(s);
+}
+
+void MicradarComponent::set_x_coord_sensor(uint8_t target, sensor::Sensor *s) {
+  this->x_coord_sensors_[target] = new SensorWithDedup<int16_t>(s);
+}
+void MicradarComponent::set_y_coord_sensor(uint8_t target, sensor::Sensor *s) {
+  this->y_coord_sensors_[target] = new SensorWithDedup<int16_t>(s);
+}
+#endif
 }
 
 
