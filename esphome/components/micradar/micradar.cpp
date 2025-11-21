@@ -422,7 +422,7 @@ namespace micradar {
                 break;
             case CTRL_TRACK_FUNCTION:
                 switch( commandWord ){
-                    case CMD_TRACK_INFORMATION:
+                 //   case CMD_TRACK_INFORMATION:
                     case CMD_TRACK_INFORMATION_QUERY:
                         num_targets_ = dataLength/TRACK_DATA_LENGTH;
                         ESP_LOGV(TAG, "targets: %d ", num_targets_ );
