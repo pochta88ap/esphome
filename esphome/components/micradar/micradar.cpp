@@ -440,7 +440,7 @@ namespace micradar {
                                 buffer_data_[10 + pos *TRACK_DATA_LENGTH]);
                             targets_[pos].y = two_byte_to_signed_int(buffer_data_[11 + pos * TRACK_DATA_LENGTH], 
                                 buffer_data_[12 + pos * TRACK_DATA_LENGTH]);
-                            d = sqrt( pow(targets_[pos].x, 2 )+ pow( targets_[pos].y, 2));
+                            d = sqrt( targets_[pos].x * targets_[pos].x + targets_[pos].y * targets_[pos].y );
                              
                             targets_[pos].height = two_byte_to_signed_int(buffer_data_[13 + pos *TRACK_DATA_LENGTH],
                                 buffer_data_[14 + pos * TRACK_DATA_LENGTH]);
