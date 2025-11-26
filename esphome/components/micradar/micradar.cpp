@@ -440,11 +440,12 @@ namespace micradar {
                             targets_[pos].y = two_byte_to_signed_int(buffer_data_[11 + pos * TRACK_DATA_LENGTH], 
                                 buffer_data_[12 + pos * TRACK_DATA_LENGTH]);
                             d = sqrt( targets_[pos].x^2 + targets_[pos].y ^2);
-                            d< targets_[pos].distance ? 1 : -1; 
+                             
                             targets_[pos].height = two_byte_to_signed_int(buffer_data_[13 + pos *TRACK_DATA_LENGTH],
                                 buffer_data_[14 + pos * TRACK_DATA_LENGTH]);
-                            targets_[pos].velocity = two_byte_to_signed_int(buffer_data_[15 + pos *TRACK_DATA_LENGTH], 
-                                buffer_data_[16 + pos * TRACK_DATA_LENGTH]);
+                            targets_[pos].velocity = d< targets_[pos].distance ? 1 : -1;
+                            //two_byte_to_signed_int(buffer_data_[15 + pos *TRACK_DATA_LENGTH], 
+                            //    buffer_data_[16 + pos * TRACK_DATA_LENGTH]);
                             targets_[pos].distance = d;
                             SAFE_PUBLISH_SENSOR(this->x_coord_sensors_[pos], targets_[pos].x);
                             SAFE_PUBLISH_SENSOR(this->y_coord_sensors_[pos], targets_[pos].y);

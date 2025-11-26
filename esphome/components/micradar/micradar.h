@@ -26,7 +26,6 @@
 #include "esphome/components/uart/uart.h"
 #include "esphome/core/automation.h"
 #include "esphome/core/helpers.h"
-#include "esphome/core/time.h"
 
 #include <array>
 
