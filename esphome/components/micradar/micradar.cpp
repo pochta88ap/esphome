@@ -425,16 +425,27 @@ namespace micradar {
                     case CMD_TRACK_INFORMATION:
                     //    break;
                     case CMD_TRACK_INFORMATION_QUERY:
+                    {
+                        uint16_t px, py, d;
                         num_targets_ = dataLength/TRACK_DATA_LENGTH;
                         ESP_LOGV(TAG, "targets: %d ", num_targets_ );
                         for( int pos = 0; pos < num_targets_; pos++ ){
                             targets_[pos].index = buffer_data_[6 + pos * TRACK_DATA_LENGTH];
                             targets_[pos].size = buffer_data_[7 + pos * TRACK_DATA_LENGTH];
                             targets_[pos].characteristics = buffer_data_[8 + pos * TRACK_DATA_LENGTH];
-                            targets_[pos].x = two_byte_to_signed_int(buffer_data_[9 + pos * TRACK_DATA_LENGTH], buffer_data_[10 + pos *TRACK_DATA_LENGTH]);
-                            targets_[pos].y = two_byte_to_signed_int(buffer_data_[11 + pos * TRACK_DATA_LENGTH], buffer_data_[12 + pos * TRACK_DATA_LENGTH]);
-                            targets_[pos].height = two_byte_to_signed_int(buffer_data_[13 + pos *TRACK_DATA_LENGTH], buffer_data_[14 + pos * TRACK_DATA_LENGTH]);
-                            targets_[pos].velocity = two_byte_to_signed_int(buffer_data_[15 + pos *TRACK_DATA_LENGTH], buffer_data_[16 + pos * TRACK_DATA_LENGTH]);
+                            px = targets_[pos].x;
+                            py = targets_[pos].y;
+                            targets_[pos].x = two_byte_to_signed_int(buffer_data_[9 + pos * TRACK_DATA_LENGTH], 
+                                buffer_data_[10 + pos *TRACK_DATA_LENGTH]);
+                            targets_[pos].y = two_byte_to_signed_int(buffer_data_[11 + pos * TRACK_DATA_LENGTH], 
+                                buffer_data_[12 + pos * TRACK_DATA_LENGTH]);
+                            d = sqrt( targets_[pos].x^2 + targets_[pos].y ^2);
+                            d< targets_[pos].distance ? 1 : -1; 
+                            targets_[pos].height = two_byte_to_signed_int(buffer_data_[13 + pos *TRACK_DATA_LENGTH],
+                                buffer_data_[14 + pos * TRACK_DATA_LENGTH]);
+                            targets_[pos].velocity = two_byte_to_signed_int(buffer_data_[15 + pos *TRACK_DATA_LENGTH], 
+                                buffer_data_[16 + pos * TRACK_DATA_LENGTH]);
+                            targets_[pos].distance = d;
                             SAFE_PUBLISH_SENSOR(this->x_coord_sensors_[pos], targets_[pos].x);
                             SAFE_PUBLISH_SENSOR(this->y_coord_sensors_[pos], targets_[pos].y);
                             SAFE_PUBLISH_SENSOR(this->move_energy_sensors_[pos], targets_[pos].size);
@@ -442,6 +453,7 @@ namespace micradar {
                                     targets_[pos].index, targets_[pos].size, targets_[pos].characteristics, 
                                     targets_[pos].x, targets_[pos].y, targets_[pos].height, targets_[pos].velocity);
                         }
+                    }
                         for( int pos = num_targets_; pos < MAX_TARGETS; pos++ ){
                             targets_[pos].index = pos + 1;
                             targets_[pos].size = 0;
@@ -455,6 +467,7 @@ namespace micradar {
                             SAFE_PUBLISH_SENSOR(this->move_energy_sensors_[pos], targets_[pos].size);
                            
                         }
+                    
                         break;
                     case CMD_INITIALIZATION_PROGRESS_QUERY:
                         break;
