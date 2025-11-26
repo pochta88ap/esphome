@@ -443,6 +443,8 @@ namespace micradar {
                              
                             targets_[pos].height = two_byte_to_signed_int(buffer_data_[13 + pos *TRACK_DATA_LENGTH],
                                 buffer_data_[14 + pos * TRACK_DATA_LENGTH]);
+                            if(d ==  targets_[pos].distance)
+                                targets_[pos].velocity = 0;
                             targets_[pos].velocity = d< targets_[pos].distance ? 1 : -1;
                             //two_byte_to_signed_int(buffer_data_[15 + pos *TRACK_DATA_LENGTH], 
                             //    buffer_data_[16 + pos * TRACK_DATA_LENGTH]);
@@ -450,9 +452,9 @@ namespace micradar {
                             SAFE_PUBLISH_SENSOR(this->x_coord_sensors_[pos], targets_[pos].x);
                             SAFE_PUBLISH_SENSOR(this->y_coord_sensors_[pos], targets_[pos].y);
                             SAFE_PUBLISH_SENSOR(this->move_energy_sensors_[pos], targets_[pos].size);
-                            ESP_LOGD(TAG, "Tracking info: Index: %d size: %d characteristics: %d x: %d y: %d height: %d velocity: %d", 
+                            ESP_LOGD(TAG, "Tracking info: Index: %d size: %d characteristics: %d x: %d \n y: %d height: %d velocity: %d distance: %d", 
                                     targets_[pos].index, targets_[pos].size, targets_[pos].characteristics, 
-                                    targets_[pos].x, targets_[pos].y, targets_[pos].height, targets_[pos].velocity);
+                                    targets_[pos].x, targets_[pos].y, targets_[pos].height, targets_[pos].velocity, targets_[pos].distance);
                         }
                     }
                         for( int pos = num_targets_; pos < MAX_TARGETS; pos++ ){
