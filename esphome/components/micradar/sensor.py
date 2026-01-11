@@ -26,7 +26,7 @@ CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(CONF_MICRADAR_ID): cv.use_id(MicradarComponent),
         cv.Optional(CONF_MOVING_ENERGY): sensor.sensor_schema(
-            filters=[{"throttle_with_priority": cv.TimePeriod(milliseconds=500)}],
+            filters=[{"throttle_with_priority": cv.TimePeriod(milliseconds=200)}],
             icon=ICON_MOTION_SENSOR,
             unit_of_measurement=UNIT_PERCENT,
         ),
@@ -40,7 +40,7 @@ CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
                 cv.Optional(CONF_MOVE_ENERGY): sensor.sensor_schema(
                     entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
                     filters=[
-                        {"throttle_with_priority": cv.TimePeriod(milliseconds=1000)}
+                        {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
                     ],
                     icon=ICON_MOTION_SENSOR,
                     unit_of_measurement=UNIT_PERCENT,
@@ -48,7 +48,7 @@ CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
                 cv.Optional(CONF_X_COORD): sensor.sensor_schema(
                     entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
                     filters=[
-                        {"throttle_with_priority": cv.TimePeriod(milliseconds=1000)}
+                        {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
                     ],
                     icon=ICON_MOTION_SENSOR,
                     unit_of_measurement=UNIT_CENTIMETER,
@@ -56,7 +56,7 @@ CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
                 cv.Optional(CONF_Y_COORD): sensor.sensor_schema(
                     entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
                     filters=[
-                        {"throttle_with_priority": cv.TimePeriod(milliseconds=1000)}
+                        {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
                     ],
                     icon=ICON_MOTION_SENSOR,
                     unit_of_measurement=UNIT_CENTIMETER,
