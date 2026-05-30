@@ -407,7 +407,7 @@ namespace micradar {
                     case CMD_BODY_MOVEMENT_PARAMETER_REPORT:
                     case CMD_BODY_MOVEMENT_PARAMETER_QUERY:
 #ifdef USE_SENSOR
-                            SAFE_PUBLISH_SENSOR(this->moving_target_energy_sensor_, this->buffer_data_[SHIFT_DATA])
+                            SAFE_PUBLISH_SENSOR(this->moving_target_energy_sensor_, this->buffer_data_[SHIFT_DATA]);
 #endif
                         ESP_LOGD(TAG, "Movement parameter: %d", this->buffer_data_[SHIFT_DATA] );
                         break;
