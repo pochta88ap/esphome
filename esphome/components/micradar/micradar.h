@@ -22,7 +22,7 @@
 #ifdef USE_TEXT_SENSOR
 #include "esphome/components/text_sensor/text_sensor.h"
 #endif
-//#include "esphome/components/ld24xx/ld24xx.h"
+#include "esphome/components/ld24xx/ld24xx.h"
 #include "esphome/components/uart/uart.h"
 #include "esphome/core/automation.h"
 #include "esphome/core/helpers.h"
@@ -31,7 +31,7 @@
 
 namespace esphome {
 namespace micradar {
-using namespace ld24xx;
+//using namespace ld24xx;
 struct Target {
         uint8_t index;
         uint8_t size;
