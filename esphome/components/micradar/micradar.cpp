@@ -466,9 +466,9 @@ namespace micradar {
                             targets_[pos].y = 0;
                             targets_[pos].height = 0;
                             targets_[pos].velocity = 0;
-                            SAFE_PUBLISH_SENSOR(this->x_coord_sensors_[pos], targets_[pos].x);
-                            SAFE_PUBLISH_SENSOR(this->y_coord_sensors_[pos], targets_[pos].y);
-                            SAFE_PUBLISH_SENSOR(this->move_energy_sensors_[pos], targets_[pos].size);
+                            if ((this->x_coord_sensors_[pos]) != nullptr) { (this->x_coord_sensors_[pos])->publish_state_if_not_dup(targets_[pos].x); }
+                            if ((this->y_coord_sensors_[pos]) != nullptr) { (this->y_coord_sensors_[pos])->publish_state_if_not_dup(targets_[pos].y); }
+                            if ((this->move_energy_sensors_[pos]) != nullptr) { (this->move_energy_sensors_[pos])->publish_state_if_not_dup(targets_[pos].size); }
                            
                         }
                     
