@@ -31,7 +31,7 @@
 
 namespace esphome {
 namespace micradar {
-//using namespace ld24xx;
+using namespace ld24xx;
 struct Target {
         uint8_t index;
         uint8_t size;
