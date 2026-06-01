@@ -578,14 +578,14 @@ namespace micradar {
 #ifdef USE_SENSOR
 // These could leak memory, but they are only set once prior to 'setup()' and should never be used again.
     void MicradarComponent::set_move_energy_sensor(uint8_t target, sensor::Sensor *s) {
-  this->move_energy_sensors_[target] = set_sensor(s);
+  this->move_energy_sensors_[target].set_sensor(s);
 }
 
 void MicradarComponent::set_x_coord_sensor(uint8_t target, sensor::Sensor *s) {
-  this->x_coord_sensors_[target] = set_sensor(s);
+  this->x_coord_sensors_[target].set_sensor(s);
 }
 void MicradarComponent::set_y_coord_sensor(uint8_t target, sensor::Sensor *s) {
-  this->y_coord_sensors_[target] = set_sensor(s);
+  this->y_coord_sensors_[target].set_sensor(s);
 }
 #endif
 }
