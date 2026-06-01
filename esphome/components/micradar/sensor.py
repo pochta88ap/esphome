@@ -11,6 +11,7 @@ from esphome.const import (
     ICON_SIGNAL,
     UNIT_CENTIMETER,
     UNIT_MILLIMETER,
+    UNIT_METER_PER_SECOND,
     UNIT_PERCENT,
 )
 from . import CONF_MICRADAR_ID, MicradarComponent
@@ -21,6 +22,7 @@ CONF_MOVING_ENERGY = "moving_energy"
 CONF_X_COORD = "x_coord"
 CONF_Y_COORD = "y_coord"
 CONF_DIST = "distance"
+CONF_VEL = "velocity"
 CONF_MOVE_ENERGY = "move_energy"
 MAX_TARGETS = 3
 
@@ -72,6 +74,14 @@ CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
                     icon=ICON_MOTION_SENSOR,
                     unit_of_measurement=UNIT_MILLIMETER,
                 ),
+                cv.Optional(CONF_VEL): sensor.sensor_schema(
+                    entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+                    filters=[
+                        {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
+                    ],
+                    icon=ICON_MOTION_SENSOR,
+                    unit_of_measurement=UNIT_METER_PER_SECOND,
+                ),
             }
         )
         for x in range(MAX_TARGETS)
@@ -98,3 +108,6 @@ async def to_code(config):
             if dist_config := target_conf.get(CONF_DIST):
                 sens = await sensor.new_sensor(dist_config)
                 cg.add(micradar_component.set_dist_sensor(x, sens))
+             if vel_config := target_conf.get(CONF_VEL):
+                sens = await sensor.new_sensor(vel_config)
+                cg.add(micradar_component.set_velocity_sensor(x, sens))

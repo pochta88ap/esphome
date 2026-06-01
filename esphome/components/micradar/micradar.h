@@ -142,6 +142,7 @@ static constexpr uint8_t MAX_TARGETS = 3;
   std::array<SensorWithDedup<int16_t> , MAX_TARGETS> x_coord_sensors_{};
   std::array<SensorWithDedup<int16_t> , MAX_TARGETS> y_coord_sensors_{};
   std::array<SensorWithDedup<int16_t> , MAX_TARGETS> dist_sensors_{};
+  std::array<SensorWithDedup<int16_t> , MAX_TARGETS> velocity_sensors_{};
   std::array<SensorWithDedup<uint8_t>   , MAX_TARGETS> move_energy_sensors_{};
 #endif
 };

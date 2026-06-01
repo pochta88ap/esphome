@@ -594,6 +594,9 @@ void MicradarComponent::set_y_coord_sensor(uint8_t target, sensor::Sensor *s) {
 void MicradarComponent::set_dist_sensor(uint8_t target, sensor::Sensor *s) {
   this->dist_sensors_[target].set_sensor(s);
 }
+void MicradarComponent::set_velocity_sensor(uint8_t target, sensor::Sensor *s) {
+  this->velocity_sensors_[target].set_sensor(s);
+}
 #endif
 }
 
