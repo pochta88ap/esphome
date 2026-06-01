@@ -20,6 +20,7 @@ CONF_MOVING_ENERGY = "moving_energy"
 CONF_X_COORD = "x_coord"
 CONF_Y_COORD = "y_coord"
 CONF_MOVE_ENERGY = "move_energy"
+MAX_TARGETS = 3
 
 
 CONFIG_SCHEMA = cv.Schema(
@@ -73,8 +74,8 @@ async def to_code(config):
     if moving_energy_config := config.get(CONF_MOVING_ENERGY):
         sens = await sensor.new_sensor(moving_energy_config)
         cg.add(micradar_component.set_moving_target_energy_sensor(sens))
-    for x in range(3):
-        if target_conf := config.get(f"target{x}"):
+    for x in range(MAX_TARGETS):
+        if target_conf := config.get(f"target_{x+1}"):
             if move_config := target_conf.get(CONF_MOVE_ENERGY):
                 sens = await sensor.new_sensor(move_config)
                 cg.add(micradar_component.set_move_energy_sensor(x, sens))
