@@ -111,7 +111,7 @@ static constexpr uint8_t MAX_TARGETS = 3;
   std::string hardware_model_;
   std::string firmware_version_;
   uint8_t num_targets_;
-  Target targets_[3];
+  Target targets_[MAX_TARGETS];
   uint64_t time;
   
   uint8_t checkDigit_( uint8_t *buf, uint16_t len);
