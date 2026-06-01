@@ -64,6 +64,14 @@ CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
                     icon=ICON_MOTION_SENSOR,
                     unit_of_measurement=UNIT_MILLIMETER,
                 ),
+                cv.Optional(CONF_DIST): sensor.sensor_schema(
+                    entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+                    filters=[
+                        {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
+                    ],
+                    icon=ICON_MOTION_SENSOR,
+                    unit_of_measurement=UNIT_MILLIMETER,
+                ),
             }
         )
         for x in range(MAX_TARGETS)
