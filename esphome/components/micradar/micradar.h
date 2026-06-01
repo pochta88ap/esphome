@@ -99,6 +99,7 @@ static constexpr uint8_t MAX_TARGETS = 3;
 #ifdef USE_SENSOR
   void set_x_coord_sensor(uint8_t target, sensor::Sensor *s);
   void set_y_coord_sensor(uint8_t target, sensor::Sensor *s);
+  void set_dist_sensor(uint8_t target, sensor::Sensor *s);
   void set_move_energy_sensor(uint8_t target, sensor::Sensor *s);
 #endif
  protected:
