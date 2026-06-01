@@ -285,7 +285,7 @@ namespace micradar {
     }
 
     void MicradarComponent::issue_data_( uint8_t control, uint8_t command, uint8_t *bytes, uint16_t len ){
-        ESP_LOGV(TAG, "Sending CONTROL %02X COMMAND %02X", control, command);
+        ESP_LOGD(TAG, "Sending CONTROL %02X COMMAND %02X", control, command);
         uint16_t sum = DATA_FRAME_HEADER[0] + DATA_FRAME_HEADER[1] + control + command + hibyte( len )+ lobyte( len ) ;
         for( int i=0; i< len; i++) sum += bytes[i];
         uint8_t check = lobyte( sum );
