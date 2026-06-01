@@ -37,7 +37,7 @@ CONFIG_SCHEMA = cv.Schema(
 
 CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
     {
-        cv.Optional(f"target_{x+1}"): cv.Schema(
+        cv.Optional(f"target_{x}"): cv.Schema(
             {
                 cv.Optional(CONF_MOVE_ENERGY): sensor.sensor_schema(
                     entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
@@ -76,7 +76,7 @@ async def to_code(config):
         sens = await sensor.new_sensor(moving_energy_config)
         cg.add(micradar_component.set_moving_target_energy_sensor(sens))
     for x in range(MAX_TARGETS):
-        if target_conf := config.get(f"target_{x+1}"):
+        if target_conf := config.get(f"target_{x}"):
             if move_config := target_conf.get(CONF_MOVE_ENERGY):
                 sens = await sensor.new_sensor(move_config)
                 cg.add(micradar_component.set_move_energy_sensor(x, sens))
