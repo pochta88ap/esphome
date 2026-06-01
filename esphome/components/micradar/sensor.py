@@ -36,7 +36,7 @@ CONFIG_SCHEMA = cv.Schema(
 
 CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
     {
-        cv.Optional(f"target{x}"): cv.Schema(
+        cv.Optional(f"target_{x+1}"): cv.Schema(
             {
                 cv.Optional(CONF_MOVE_ENERGY): sensor.sensor_schema(
                     entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
