@@ -10,6 +10,7 @@ from esphome.const import (
     ICON_MOTION_SENSOR,
     ICON_SIGNAL,
     UNIT_CENTIMETER,
+    UNIT_MILLIMETER,
     UNIT_PERCENT,
 )
 from . import CONF_MICRADAR_ID, MicradarComponent
@@ -52,7 +53,7 @@ CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
                         {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
                     ],
                     icon=ICON_MOTION_SENSOR,
-                    unit_of_measurement=UNIT_CENTIMETER,
+                    unit_of_measurement=UNIT_MILLIMETER,
                 ),
                 cv.Optional(CONF_Y_COORD): sensor.sensor_schema(
                     entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
@@ -60,11 +61,11 @@ CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
                         {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
                     ],
                     icon=ICON_MOTION_SENSOR,
-                    unit_of_measurement=UNIT_CENTIMETER,
+                    unit_of_measurement=UNIT_MILLIMETER,
                 ),
             }
         )
-        for x in range(3)
+        for x in range(MAX_TARGETS)
 
     }
 )
