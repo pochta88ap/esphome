@@ -303,6 +303,7 @@ namespace micradar {
         const char *init_state;
         const char *human_presence;
         const char *movement_info;
+        ESP_LOGD(TAG, "control word %02X command %02X", controlWord, commandWord);
         switch( controlWord ){
             case CTRL_SYSTEM_FUNCTIONS:
                 switch( commandWord ){
