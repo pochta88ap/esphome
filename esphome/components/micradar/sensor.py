@@ -20,6 +20,7 @@ DEPENDENCIES = ["micradar"]
 CONF_MOVING_ENERGY = "moving_energy"
 CONF_X_COORD = "x_coord"
 CONF_Y_COORD = "y_coord"
+CONF_DIST = "distance"
 CONF_MOVE_ENERGY = "move_energy"
 MAX_TARGETS = 3
 
@@ -86,3 +87,6 @@ async def to_code(config):
             if y_config := target_conf.get(CONF_Y_COORD):
                 sens = await sensor.new_sensor(y_config)
                 cg.add(micradar_component.set_y_coord_sensor(x, sens))
+            if dist_config := target_conf.get(CONF_DIST):
+                sens = await sensor.new_sensor(dist_config)
+                cg.add(micradar_component.set_dist_sensor(x, sens))

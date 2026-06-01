@@ -455,6 +455,7 @@ namespace micradar {
                             targets_[pos].distance = d;
                             SAFE_PUBLISH_SENSOR(this->x_coord_sensors_[pos], targets_[pos].x);
                             SAFE_PUBLISH_SENSOR(this->y_coord_sensors_[pos], targets_[pos].y);
+                            SAFE_PUBLISH_SENSOR(this->dist_sensors_[pos], targets_[pos].distance);
                             SAFE_PUBLISH_SENSOR(this->move_energy_sensors_[pos], targets_[pos].size); 
                             ESP_LOGD(TAG, "Tracking info: Index: %d size: %d characteristics: %d x: %d \n y: %d height: %d velocity: %d distance: %d", 
                                     targets_[pos].index, targets_[pos].size, targets_[pos].characteristics, 
@@ -589,6 +590,9 @@ void MicradarComponent::set_x_coord_sensor(uint8_t target, sensor::Sensor *s) {
 }
 void MicradarComponent::set_y_coord_sensor(uint8_t target, sensor::Sensor *s) {
   this->y_coord_sensors_[target].set_sensor(s);
+}
+void MicradarComponent::set_dist_sensor(uint8_t target, sensor::Sensor *s) {
+  this->dist_sensors_[target].set_sensor(s);
 }
 #endif
 }
