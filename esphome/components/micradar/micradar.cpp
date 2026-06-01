@@ -247,6 +247,7 @@ namespace micradar {
 
     void MicradarComponent::readline_(int readch ) {
         if (readch < 0) {
+            ESP_LOGD(TAG, "read nothing");
             return;  // No data available
         }
         if (this->buffer_pos_ < MAX_LINE_LENGTH - 1) {
