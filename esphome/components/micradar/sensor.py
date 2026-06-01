@@ -75,7 +75,7 @@ async def to_code(config):
         sens = await sensor.new_sensor(moving_energy_config)
         cg.add(micradar_component.set_moving_target_energy_sensor(sens))
     for x in range(MAX_TARGETS):
-        if target_conf := config.get(f"target_{x}"):
+        if target_conf := config.get(f"target_{x+1}"):
             if move_config := target_conf.get(CONF_MOVE_ENERGY):
                 sens = await sensor.new_sensor(move_config)
                 cg.add(micradar_component.set_move_energy_sensor(x, sens))
