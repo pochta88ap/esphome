@@ -240,10 +240,12 @@ namespace micradar {
 
 
     void MicradarComponent::loop() {
-        while (this->available()) {
+        size_t avail = this->available();
+        while (avail >0) {
             this->readline_(this->read());
-             ESP_LOGD(TAG, "read nothing");
+             
         }
+        ESP_LOGD(TAG, "read nothing");
     }
 
     void MicradarComponent::readline_(int readch ) {
