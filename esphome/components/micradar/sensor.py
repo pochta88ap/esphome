@@ -108,6 +108,6 @@ async def to_code(config):
             if dist_config := target_conf.get(CONF_DIST):
                 sens = await sensor.new_sensor(dist_config)
                 cg.add(micradar_component.set_dist_sensor(x, sens))
-             if vel_config := target_conf.get(CONF_VEL):
+            if vel_config := target_conf.get(CONF_VEL):
                 sens = await sensor.new_sensor(vel_config)
                 cg.add(micradar_component.set_velocity_sensor(x, sens))
