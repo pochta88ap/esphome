@@ -267,7 +267,7 @@ namespace micradar {
                 this->buffer_pos_= 0;
                 return;
             }
-             ESP_LOGV(TAG, "Handling Data: %s", format_hex_pretty(this->buffer_data_, this->buffer_pos_).c_str());
+             ESP_LOGD(TAG, "Handling Data: %s", format_hex_pretty(this->buffer_data_, this->buffer_pos_).c_str());
             this->handle_data_();
             this->buffer_pos_ = 0;  // Reset position index for next message
         }
