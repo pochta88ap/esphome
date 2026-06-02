@@ -453,10 +453,10 @@ namespace micradar {
                             //two_byte_to_signed_int(buffer_data_[15 + pos *TRACK_DATA_LENGTH], 
                             //    buffer_data_[16 + pos * TRACK_DATA_LENGTH]);
                             targets_[pos].distance = d;
-                            SAFE_PUBLISH_SENSOR(this->x_coord_sensors_[pos], targets_[pos].x);
-                            SAFE_PUBLISH_SENSOR(this->y_coord_sensors_[pos], targets_[pos].y);
-                            SAFE_PUBLISH_SENSOR(this->dist_sensors_[pos], targets_[pos].distance);
-                            SAFE_PUBLISH_SENSOR(this->move_energy_sensors_[pos], targets_[pos].size); 
+                            SAFE_PUBLISH_SENSOR(this->x_coord_sensors_[targets_[pos].index], targets_[pos].x);
+                            SAFE_PUBLISH_SENSOR(this->y_coord_sensors_[targets_[pos].index], targets_[pos].y);
+                            SAFE_PUBLISH_SENSOR(this->dist_sensors_[targets_[pos].index], targets_[pos].distance);
+                            SAFE_PUBLISH_SENSOR(this->move_energy_sensors_[targets_[pos].index], targets_[pos].size); 
                             ESP_LOGD(TAG, "Tracking info: Index: %d size: %d characteristics: %d x: %d \n y: %d height: %d velocity: %d distance: %d", 
                                     targets_[pos].index, targets_[pos].size, targets_[pos].characteristics, 
                                     targets_[pos].x, targets_[pos].y, targets_[pos].height, targets_[pos].velocity, targets_[pos].distance);
