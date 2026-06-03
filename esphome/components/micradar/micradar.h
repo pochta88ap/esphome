@@ -41,8 +41,6 @@ struct Target {
         int16_t height;
         int16_t velocity;
         int16_t distance;
-        float_t angle;
-        
     };
 
 
