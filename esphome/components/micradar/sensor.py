@@ -35,7 +35,7 @@ CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(CONF_MICRADAR_ID): cv.use_id(MicradarComponent),
         cv.Optional(CONF_MOVING_ENERGY): sensor.sensor_schema(
-            filters=[{"throttle_with_priority": cv.TimePeriod(milliseconds=200)}],
+            filters=[{"throttle_with_priority": cv.TimePeriod(milliseconds=500)}],
             icon=ICON_MOTION_SENSOR,
             unit_of_measurement=UNIT_PERCENT,
         ),
