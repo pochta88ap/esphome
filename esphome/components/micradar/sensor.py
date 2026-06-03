@@ -13,6 +13,7 @@ from esphome.const import (
     UNIT_MILLIMETER,
     UNIT_METER_PER_SECOND,
     UNIT_PERCENT,
+    
 )
 from . import CONF_MICRADAR_ID, MicradarComponent
 
@@ -23,6 +24,7 @@ CONF_X_COORD = "x_coord"
 CONF_Y_COORD = "y_coord"
 CONF_DIST = "distance"
 CONF_VEL = "velocity"
+CONF_ANGLE = "angle"
 CONF_MOVE_ENERGY = "move_energy"
 MAX_TARGETS = 3
 
@@ -56,7 +58,7 @@ CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
                         {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
                     ],
                     icon=ICON_MOTION_SENSOR,
-                    unit_of_measurement=UNIT_MILLIMETER,
+                    unit_of_measurement=UNIT_CENTIMETER,
                 ),
                 cv.Optional(CONF_Y_COORD): sensor.sensor_schema(
                     entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
@@ -64,7 +66,7 @@ CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
                         {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
                     ],
                     icon=ICON_MOTION_SENSOR,
-                    unit_of_measurement=UNIT_MILLIMETER,
+                    unit_of_measurement=UNIT_CENTIMETER,
                 ),
                 cv.Optional(CONF_DIST): sensor.sensor_schema(
                     entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
@@ -72,9 +74,17 @@ CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
                         {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
                     ],
                     icon=ICON_MOTION_SENSOR,
-                    unit_of_measurement=UNIT_MILLIMETER,
+                    unit_of_measurement=UNIT_CENTIMETER,
                 ),
                 cv.Optional(CONF_VEL): sensor.sensor_schema(
+                    entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+                    filters=[
+                        {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
+                    ],
+                    icon=ICON_MOTION_SENSOR,
+                    unit_of_measurement=UNIT_METER_PER_SECOND,
+                ),
+                 cv.Optional(CONF_ANGLE): sensor.sensor_schema(
                     entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
                     filters=[
                         {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
@@ -111,3 +121,6 @@ async def to_code(config):
             if vel_config := target_conf.get(CONF_VEL):
                 sens = await sensor.new_sensor(vel_config)
                 cg.add(micradar_component.set_velocity_sensor(x, sens))
+            if angle_config := target_conf.get(CONF_ANGLE):
+                sens = await sensor.new_sensor(angle_config)
+                cg.add(micradar_component.set_angle_sensor(x, sens))

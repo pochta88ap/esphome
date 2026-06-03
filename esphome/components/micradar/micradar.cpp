@@ -240,15 +240,25 @@ namespace micradar {
 
 
     void MicradarComponent::loop() {
-        size_t avail = this->available();
-        while (avail >0) {
-            this->readline_(this->read());
-        }
+       // Read all available bytes in batches to reduce UART call overhead.
+  size_t avail = this->available();
+  uint8_t buf[MAX_LINE_LENGTH];
+  while (avail > 0) {
+    size_t to_read = std::min(avail, sizeof(buf));
+    if (!this->read_array(buf, to_read)) {
+      break;
+    }
+    avail -= to_read;
+
+    for (size_t i = 0; i < to_read; i++) {
+      this->readline_(buf[i]);
+    }
+  }
     }
 
     void MicradarComponent::readline_(int readch ) {
         if (readch < 0) {
-            ESP_LOGD(TAG, "read nothing");
+           
             return;  // No data available
         }
         if (this->buffer_pos_ < MAX_LINE_LENGTH - 1) {
@@ -305,7 +315,7 @@ namespace micradar {
         const char *init_state;
         const char *human_presence;
         const char *movement_info;
-        ESP_LOGD(TAG, "control word %02X command %02X", controlWord, commandWord);
+    //    ESP_LOGD(TAG, "control word %02X command %02X", controlWord, commandWord);
         switch( controlWord ){
             case CTRL_SYSTEM_FUNCTIONS:
                 switch( commandWord ){
@@ -431,8 +441,9 @@ namespace micradar {
                     case CMD_TRACK_INFORMATION_QUERY:
                     {
                         uint16_t px, py, d;
+                        float angle = 0;
                         num_targets_ = dataLength/TRACK_DATA_LENGTH;
-                        ESP_LOGV(TAG, "targets: %d ", num_targets_ );
+                        ESP_LOGD(TAG, "targets: %d ", num_targets_ );
                         for( int pos = 0; pos < num_targets_; pos++ ){
                             targets_[pos].index = buffer_data_[6 + pos * TRACK_DATA_LENGTH];
                             targets_[pos].size = buffer_data_[7 + pos * TRACK_DATA_LENGTH];
@@ -450,6 +461,7 @@ namespace micradar {
                             if(d ==  targets_[pos].distance)
                                 targets_[pos].velocity = 0;
                             targets_[pos].velocity = d< targets_[pos].distance ? 1 : -1;
+                            angle = atan2f(static_cast<float>(-px), static_cast<float>(py)) * (180.0f / std::numbers::pi_v<float>);
                             //two_byte_to_signed_int(buffer_data_[15 + pos *TRACK_DATA_LENGTH], 
                             //    buffer_data_[16 + pos * TRACK_DATA_LENGTH]);
                             targets_[pos].distance = d;
@@ -457,9 +469,10 @@ namespace micradar {
                             SAFE_PUBLISH_SENSOR(this->y_coord_sensors_[targets_[pos].index], targets_[pos].y);
                             SAFE_PUBLISH_SENSOR(this->dist_sensors_[targets_[pos].index], targets_[pos].distance);
                             SAFE_PUBLISH_SENSOR(this->move_energy_sensors_[targets_[pos].index], targets_[pos].size); 
-                            ESP_LOGD(TAG, "Tracking info: Index: %d size: %d characteristics: %d x: %d \n y: %d height: %d velocity: %d distance: %d", 
+                            SAFE_PUBLISH_SENSOR(this->angle_sensors_[targets_[pos].index], angle); 
+                            ESP_LOGD(TAG, "Tracking info: Index: %d size: %d characteristics: %d x: %d \n y: %d height: %d velocity: %d distance: %d angle: %f", 
                                     targets_[pos].index, targets_[pos].size, targets_[pos].characteristics, 
-                                    targets_[pos].x, targets_[pos].y, targets_[pos].height, targets_[pos].velocity, targets_[pos].distance);
+                                    targets_[pos].x, targets_[pos].y, targets_[pos].height, targets_[pos].velocity, targets_[pos].distance, angle);
                         }
                     }/*
                         for( int pos = num_targets_; pos < MAX_TARGETS; pos++ ){
@@ -596,6 +609,9 @@ void MicradarComponent::set_dist_sensor(uint8_t target, sensor::Sensor *s) {
 }
 void MicradarComponent::set_velocity_sensor(uint8_t target, sensor::Sensor *s) {
   this->velocity_sensors_[target].set_sensor(s);
+}
+void MicradarComponent::set_angle_sensor(uint8_t target, sensor::Sensor *s) {
+  this->angle_sensors_[target].set_sensor(s);
 }
 #endif
 }

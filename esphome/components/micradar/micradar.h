@@ -101,6 +101,7 @@ static constexpr uint8_t MAX_TARGETS = 3;
   void set_y_coord_sensor(uint8_t target, sensor::Sensor *s);
   void set_dist_sensor(uint8_t target, sensor::Sensor *s);
   void set_velocity_sensor(uint8_t target, sensor::Sensor *s);
+  void set_angle_sensor(uint8_t target, sensor::Sensor *s);
   void set_move_energy_sensor(uint8_t target, sensor::Sensor *s);
 #endif
  protected:
@@ -144,6 +145,7 @@ static constexpr uint8_t MAX_TARGETS = 3;
   std::array<SensorWithDedup<int16_t> , MAX_TARGETS> y_coord_sensors_{};
   std::array<SensorWithDedup<int16_t> , MAX_TARGETS> dist_sensors_{};
   std::array<SensorWithDedup<int16_t> , MAX_TARGETS> velocity_sensors_{};
+  std::array<SensorWithDedup<float_t> , MAX_TARGETS> angle_sensors_{};
   std::array<SensorWithDedup<uint8_t>   , MAX_TARGETS> move_energy_sensors_{};
 #endif
 };
