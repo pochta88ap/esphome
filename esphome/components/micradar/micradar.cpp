@@ -446,11 +446,11 @@ namespace micradar {
                         ESP_LOGD(TAG, "targets: %d ", num_targets_ );
                         for( int pos = 0; pos < MAX_TARGETS; pos++ ){
                             if( pos >=num_targets_) {
-                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->x_coord_sensors_[targets_[pos].index]);
-                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->y_coord_sensors_[targets_[pos].index]);
-                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->dist_sensors_[targets_[pos].index]);
-                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->move_energy_sensors_[targets_[pos].index]); 
-                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->angle_sensors_[targets_[pos].index]); 
+                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->x_coord_sensors_[pos]);
+                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->y_coord_sensors_[pos]);
+                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->dist_sensors_[pos]);
+                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->move_energy_sensors_[pos]); 
+                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->angle_sensors_[pos]); 
                                 continue;
                             }
                             targets_[pos].index = buffer_data_[6 + pos * TRACK_DATA_LENGTH];
