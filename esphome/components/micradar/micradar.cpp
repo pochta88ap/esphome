@@ -443,9 +443,9 @@ namespace micradar {
                         uint16_t px, py, d;
                         float angle = 0;
                         num_targets_ = dataLength/TRACK_DATA_LENGTH;
-                        ESP_LOGI(TAG, "targets: %d ", num_targets_ );
+                        ESP_LOGD(TAG, "targets: %d ", num_targets_ );
                         for( int pos = 0; pos < MAX_TARGETS; pos++ ){
-                            if( pos >num_targets_) {
+                            if( pos >=num_targets_) {
                                 SAFE_PUBLISH_SENSOR_UNKNOWN(this->x_coord_sensors_[pos]);
                                 SAFE_PUBLISH_SENSOR_UNKNOWN(this->y_coord_sensors_[pos]);
                                 SAFE_PUBLISH_SENSOR_UNKNOWN(this->dist_sensors_[pos]);
