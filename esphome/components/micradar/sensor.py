@@ -6,12 +6,14 @@ from esphome.const import (
     CONF_MOVING_DISTANCE,
     DEVICE_CLASS_DISTANCE,
     DEVICE_CLASS_ILLUMINANCE,
+    DEVICE_CLASS_SPEED,
     ENTITY_CATEGORY_DIAGNOSTIC,
     ICON_MOTION_SENSOR,
     ICON_SIGNAL,
     UNIT_CENTIMETER,
     UNIT_MILLIMETER,
     UNIT_METER_PER_SECOND,
+    UNIT_DEGREES,
     UNIT_PERCENT,
     
 )
@@ -47,39 +49,69 @@ CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
                 cv.Optional(CONF_MOVE_ENERGY): sensor.sensor_schema(
                     entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
                     filters=[
-                        {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
+                         {
+                            "timeout": {
+                                "timeout": cv.TimePeriod(milliseconds=1000),
+                                "value": "last",
+                            }
+                        },
+                        {"throttle_with_priority": cv.TimePeriod(milliseconds=1000)}
                     ],
                     icon=ICON_MOTION_SENSOR,
                     unit_of_measurement=UNIT_PERCENT,
                 ),
                 cv.Optional(CONF_X_COORD): sensor.sensor_schema(
-                    entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+                    device_class=DEVICE_CLASS_DISTANCE,
                     filters=[
-                        {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
+                         {
+                            "timeout": {
+                                "timeout": cv.TimePeriod(milliseconds=1000),
+                                "value": "last",
+                            }
+                        },
+                        {"throttle_with_priority": cv.TimePeriod(milliseconds=1000)}
                     ],
                     icon=ICON_MOTION_SENSOR,
                     unit_of_measurement=UNIT_CENTIMETER,
                 ),
                 cv.Optional(CONF_Y_COORD): sensor.sensor_schema(
-                    entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+                    device_class=DEVICE_CLASS_DISTANCE,
                     filters=[
-                        {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
+                         {
+                            "timeout": {
+                                "timeout": cv.TimePeriod(milliseconds=1000),
+                                "value": "last",
+                            }
+                        },
+                        {"throttle_with_priority": cv.TimePeriod(milliseconds=1000)}
                     ],
                     icon=ICON_MOTION_SENSOR,
                     unit_of_measurement=UNIT_CENTIMETER,
                 ),
                 cv.Optional(CONF_DIST): sensor.sensor_schema(
-                    entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+                    device_class=DEVICE_CLASS_DISTANCE,
                     filters=[
-                        {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
+                         {
+                            "timeout": {
+                                "timeout": cv.TimePeriod(milliseconds=1000),
+                                "value": "last",
+                            }
+                        },
+                        {"throttle_with_priority": cv.TimePeriod(milliseconds=1000)}
                     ],
                     icon=ICON_MOTION_SENSOR,
                     unit_of_measurement=UNIT_CENTIMETER,
                 ),
                 cv.Optional(CONF_VEL): sensor.sensor_schema(
-                    entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+                    device_class=DEVICE_CLASS_SPEED,
                     filters=[
-                        {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
+                         {
+                            "timeout": {
+                                "timeout": cv.TimePeriod(milliseconds=1000),
+                                "value": "last",
+                            }
+                        },
+                        {"throttle_with_priority": cv.TimePeriod(milliseconds=1000)}
                     ],
                     icon=ICON_MOTION_SENSOR,
                     unit_of_measurement=UNIT_METER_PER_SECOND,
@@ -87,10 +119,16 @@ CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
                  cv.Optional(CONF_ANGLE): sensor.sensor_schema(
                     entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
                     filters=[
-                        {"throttle_with_priority": cv.TimePeriod(milliseconds=500)}
+                         {
+                            "timeout": {
+                                "timeout": cv.TimePeriod(milliseconds=1000),
+                                "value": "last",
+                            }
+                        },
+                        {"throttle_with_priority": cv.TimePeriod(milliseconds=1000)}
                     ],
                     icon=ICON_MOTION_SENSOR,
-                    unit_of_measurement=UNIT_METER_PER_SECOND,
+                    unit_of_measurement=UNIT_DEGREES,
                 ),
             }
         )

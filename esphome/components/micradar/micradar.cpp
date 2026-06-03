@@ -444,7 +444,15 @@ namespace micradar {
                         float angle = 0;
                         num_targets_ = dataLength/TRACK_DATA_LENGTH;
                         ESP_LOGD(TAG, "targets: %d ", num_targets_ );
-                        for( int pos = 0; pos < num_targets_; pos++ ){
+                        for( int pos = 0; pos < MAX_TARGETS; pos++ ){
+                            if( pos >=num_targets_) {
+                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->x_coord_sensors_[targets_[pos].index]);
+                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->y_coord_sensors_[targets_[pos].index]);
+                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->dist_sensors_[targets_[pos].index]);
+                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->move_energy_sensors_[targets_[pos].index]); 
+                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->angle_sensors_[targets_[pos].index]); 
+                                continue;
+                            }
                             targets_[pos].index = buffer_data_[6 + pos * TRACK_DATA_LENGTH];
                             targets_[pos].size = buffer_data_[7 + pos * TRACK_DATA_LENGTH];
                             targets_[pos].characteristics = buffer_data_[8 + pos * TRACK_DATA_LENGTH];
@@ -460,7 +468,11 @@ namespace micradar {
                                 buffer_data_[14 + pos * TRACK_DATA_LENGTH]);
                             if(d ==  targets_[pos].distance)
                                 targets_[pos].velocity = 0;
-                            targets_[pos].velocity = d< targets_[pos].distance ? 1 : -1;
+                            else
+                                if( d< targets_[pos].distance )
+                                    targets_[pos].velocity = 1;
+                            else
+                                targets_[pos].velocity = -1;
                             angle = atan2f(static_cast<float>(-px), static_cast<float>(py)) * (180.0f / std::numbers::pi_v<float>);
                             //two_byte_to_signed_int(buffer_data_[15 + pos *TRACK_DATA_LENGTH], 
                             //    buffer_data_[16 + pos * TRACK_DATA_LENGTH]);
