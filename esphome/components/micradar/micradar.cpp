@@ -400,7 +400,11 @@ namespace micradar {
                     case CMD_HUMAN_PRESENCE_INFORMATION_REPORT:
                     case CMD_PRESENCE_INFORMATION_QUERY:
                         if (this->target_binary_sensor_ != nullptr) {
-                            this->target_binary_sensor_->publish_state(this->buffer_data_[SHIFT_DATA] != 0x00);
+                            this->target_binary_sensor_->publish_state(this->buffer_data_[SHIFT_DATA] != 0);
+                            if( this->buffer_data_[SHIFT_DATA] == 0 )
+                            for( pos =0; pos < MAX_TARGET; pos++){
+                                set_sensors_unknown( pos);
+                            }
                         }
                         human_presence = find_str( HUMAN_PRESENCE_BY_UINT, this->buffer_data_[SHIFT_DATA]);
                         ESP_LOGD(TAG, "Human presence: %s", human_presence );
@@ -446,11 +450,7 @@ namespace micradar {
                         ESP_LOGI(TAG, "targets: %d ", num_targets_ );
                         for( int pos = 0; pos < MAX_TARGETS; pos++ ){
                             if( pos >=num_targets_) {
-                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->x_coord_sensors_[pos]);
-                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->y_coord_sensors_[pos]);
-                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->dist_sensors_[pos]);
-                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->move_energy_sensors_[pos]); 
-                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->angle_sensors_[pos]); 
+                               set_sensors_unknown(pos);
                                 continue;
                             }
                             targets_[pos].index = buffer_data_[6 + pos * TRACK_DATA_LENGTH];
@@ -482,7 +482,7 @@ namespace micradar {
                             SAFE_PUBLISH_SENSOR(this->dist_sensors_[targets_[pos].index-1], targets_[pos].distance);
                             SAFE_PUBLISH_SENSOR(this->move_energy_sensors_[targets_[pos].index-1], targets_[pos].size); 
                             SAFE_PUBLISH_SENSOR(this->angle_sensors_[targets_[pos].index-1], angle); 
-                            ESP_LOGI(TAG, "Tracking info: Index: %d size: %d characteristics: %d x: %d \n y: %d height: %d velocity: %d distance: %d angle: %f", 
+                            ESP_LOGD(TAG, "Tracking info: Index: %d size: %d characteristics: %d x: %d \n y: %d height: %d velocity: %d distance: %d angle: %f", 
                                     targets_[pos].index, targets_[pos].size, targets_[pos].characteristics, 
                                     targets_[pos].x, targets_[pos].y, targets_[pos].height, targets_[pos].velocity, targets_[pos].distance, angle);
                         }
@@ -624,6 +624,14 @@ void MicradarComponent::set_velocity_sensor(uint8_t target, sensor::Sensor *s) {
 }
 void MicradarComponent::set_angle_sensor(uint8_t target, sensor::Sensor *s) {
   this->angle_sensors_[target].set_sensor(s);
+}
+void MicradarComponent::set_target_unknown( uint8_t tgt ){
+     SAFE_PUBLISH_SENSOR_UNKNOWN(this->x_coord_sensors_[pos]);
+                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->y_coord_sensors_[tgt]);
+                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->dist_sensors_[tgt]);
+                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->move_energy_sensors_[tgt]); 
+                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->angle_sensors_[tgt]);
+                                SAFE_PUBLISH_SENSOR_UNKNOWN(this->velocity_sensors_[tgt]); 
 }
 #endif
 }
