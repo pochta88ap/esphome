@@ -102,7 +102,7 @@ static constexpr uint8_t MAX_TARGETS = 3;
   void set_velocity_sensor(uint8_t target, sensor::Sensor *s);
   void set_angle_sensor(uint8_t target, sensor::Sensor *s);
   void set_move_energy_sensor(uint8_t target, sensor::Sensor *s);
-  void set_target_unknown( uint8_t tgt );
+  void set_sensors_unknown( uint8_t tgt );
 #endif
  protected:
   void readline_(int readch);
