@@ -402,7 +402,7 @@ namespace micradar {
                         if (this->target_binary_sensor_ != nullptr) {
                             this->target_binary_sensor_->publish_state(this->buffer_data_[SHIFT_DATA] != 0);
                             if( this->buffer_data_[SHIFT_DATA] == 0 )
-                            for( pos =0; pos < MAX_TARGET; pos++){
+                            for( uint8_t pos =0; pos < MAX_TARGET; pos++){
                                 set_sensors_unknown( pos);
                             }
                         }
