@@ -117,7 +117,7 @@ CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
                     unit_of_measurement=UNIT_METER_PER_SECOND,
                 ),
                  cv.Optional(CONF_ANGLE): sensor.sensor_schema(
-                    entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+                    device_class=DEVICE_CLASS_DISTANCE,
                     filters=[
                          {
                             "timeout": {
