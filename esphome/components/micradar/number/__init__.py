@@ -2,40 +2,45 @@ import esphome.codegen as cg
 from esphome.components import number
 import esphome.config_validation as cv
 from esphome.const import (
-    CONF_ENTITY_CATEGORY,
-    CONF_ICON,
-    CONF_MODE,
-    CONF_SOURCE_ID,
-    CONF_UNIT_OF_MEASUREMENT,
-)
-from esphome.core.entity_helpers import inherit_property_from
-
-from .. import micradar_ns
-
-MicradarNumber = micradar_ns.class_("MicradarNumber", number.Number, cg.Component)
-
-
-CONFIG_SCHEMA = (
-    number.number_schema(MicradarNumber)
-    .extend(
-        {
-            cv.Required(CONF_SOURCE_ID): cv.use_id(number.Number),
-        }
-    )
-    .extend(cv.COMPONENT_SCHEMA)
+    CONF_ID,
+    
+    CONF_FREQUENCY,
+    
+    ENTITY_CATEGORY_CONFIG,
+    
+    ICON_TIMELAPSE,
+   
+    UNIT_HERTZ,
 )
 
-FINAL_VALIDATE_SCHEMA = cv.All(
-    inherit_property_from(CONF_ICON, CONF_SOURCE_ID),
-    inherit_property_from(CONF_ENTITY_CATEGORY, CONF_SOURCE_ID),
-    inherit_property_from(CONF_UNIT_OF_MEASUREMENT, CONF_SOURCE_ID),
-    inherit_property_from(CONF_MODE, CONF_SOURCE_ID),
-)
+from .. import CONF_MICRADAR_ID, MicradarComponent, micradar_ns
 
+TrackFrequencyNumber = micradar_ns.class_("TrackFrequencyNumber", number.Number)
+
+
+CONF_MAX_MOVE_DISTANCE_GATE = "max_move_distance_gate"
+CONF_MAX_STILL_DISTANCE_GATE = "max_still_distance_gate"
+CONF_LIGHT_THRESHOLD = "light_threshold"
+
+FREQUENCY_GROUP = "frequency"
+
+CONFIG_SCHEMA = cv.Schema(
+    {
+        cv.GenerateID(CONF_ID): cv.declare_id(cg.EntityBase),
+        cv.GenerateID(CONF_MICRADAR_ID): cv.use_id(MicradarComponent),
+        cv.Inclusive(CONF_FREQUENCY, FREQUENCY_GROUP): number.number_schema(
+            TrackFrequencyNumber,
+            unit_of_measurement=UNIT_HERTZ,
+            entity_category=ENTITY_CATEGORY_CONFIG,
+            icon=ICON_TIMELAPSE,
+        ),
+        
+    }
+)
 
 async def to_code(config):
-    var = await number.new_number(config, min_value=0, max_value=0, step=0)
-    await cg.register_component(var, config)
-
-    source = await cg.get_variable(config[CONF_SOURCE_ID])
-    cg.add(var.set_source(source))
+    ld2410_component = await cg.get_variable(config[CONF_MICRADAR_ID])
+    if frequency_config := config.get(CONF_FREQUENCY):
+        n = await number.new_number(
+            frequency_config, min_value=0, max_value=65535, step=1
+        )
