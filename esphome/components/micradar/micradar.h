@@ -41,7 +41,7 @@ struct Target {
         int16_t height;
         int16_t velocity;
         int16_t distance;
-        uint64_t timeval time_us;
+        uint64_t time_us;
     };
 
 
