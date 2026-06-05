@@ -478,7 +478,7 @@ namespace micradar {
                           
                             time_delta = time_ - targets_[pos].time_us;
                             targets_[pos].time_us = time_;
-                            vel =  10000L * ( targets_[pos].distance - d ) / time_delta;
+                            vel =  10000.0L * ( static_cast<float>(targets_[pos].distance) - static_cast<float>(d) ) / time_delta;
                             targets_[pos].velocity = vel;
                             
                             angle = atan2f(static_cast<float>(-px), static_cast<float>(py)) * (180.0f / std::numbers::pi_v<float>);
