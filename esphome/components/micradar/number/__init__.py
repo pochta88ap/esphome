@@ -42,5 +42,5 @@ async def to_code(config):
     ld2410_component = await cg.get_variable(config[CONF_MICRADAR_ID])
     if frequency_config := config.get(CONF_FREQUENCY):
         n = await number.new_number(
-            frequency_config, min_value=0, max_value=65535, step=1
+            frequency_config, min_value=0.01, max_value=50, step=0.01
         )
