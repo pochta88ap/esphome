@@ -317,7 +317,14 @@ namespace micradar {
         const char *movement_info;
         struct timeval tv_now;
         gettimeofday( &tv_now, NULL );
-        time_ = (int64_t)tv_now.tv_sec * 1000000L + (int64_t)tv_now.tv_usec;
+        uint64_t newtime = (int64_t)tv_now.tv_sec * 1000000L + (int64_t)tv_now.tv_usec;
+        uint64_t interval = newtime - time_;
+        
+        if( interval > track_interval_) {
+            time_ = newtime;
+            this->issue_track_information_query_();
+        }
+
     //    ESP_LOGD(TAG, "control word %02X command %02X", controlWord, commandWord);
         switch( controlWord ){
             case CTRL_SYSTEM_FUNCTIONS:
@@ -476,8 +483,8 @@ namespace micradar {
                             targets_[pos].height = two_byte_to_signed_int(buffer_data_[13 + pos *TRACK_DATA_LENGTH],
                                 buffer_data_[14 + pos * TRACK_DATA_LENGTH]);
                           
-                            time_delta = time_ - targets_[pos].time_us;
-                            targets_[pos].time_us = time_;
+                            time_delta = newtime - targets_[pos].time_us;
+                            targets_[pos].time_us = newtime;
                             vel =  10000.0L * ( static_cast<float>(targets_[pos].distance) - static_cast<float>(d) ) / time_delta;
                             targets_[pos].velocity = vel;
                             
