@@ -315,6 +315,9 @@ namespace micradar {
         const char *init_state;
         const char *human_presence;
         const char *movement_info;
+        struct timeval tv_now;
+        gettimeofday( &tv_now, NULL );
+        time_ = (int64_t)tv_now.tv_sec * 1000000L + (int64_t)tv_now.tv_usec;
     //    ESP_LOGD(TAG, "control word %02X command %02X", controlWord, commandWord);
         switch( controlWord ){
             case CTRL_SYSTEM_FUNCTIONS:
@@ -401,10 +404,13 @@ namespace micradar {
                     case CMD_PRESENCE_INFORMATION_QUERY:
                         if (this->target_binary_sensor_ != nullptr) {
                             this->target_binary_sensor_->publish_state(this->buffer_data_[SHIFT_DATA] != 0);
-                            if( this->buffer_data_[SHIFT_DATA] == 0 )
-                            for( uint8_t pos =0; pos < MAX_TARGETS; pos++){
+                           
+                            if( this->human_presence_ and this->buffer_data_[SHIFT_DATA] == 0 ){
+                              for( uint8_t pos =0; pos < MAX_TARGETS; pos++){
                                 set_sensors_unknown( pos);
+                              }
                             }
+                            this->human_presence_ = this->buffer_data_[SHIFT_DATA];
                         }
                         human_presence = find_str( HUMAN_PRESENCE_BY_UINT, this->buffer_data_[SHIFT_DATA]);
                         ESP_LOGD(TAG, "Human presence: %s", human_presence );
@@ -444,8 +450,11 @@ namespace micradar {
                     //    break;
                     case CMD_TRACK_INFORMATION_QUERY:
                     {
+                        if( !human_presence ) break;
                         uint16_t px, py, d;
-                        float angle = 0;
+                        float angle = 0, vel = 0;
+                        uint64_t time_delta;
+                      
                         num_targets_ = dataLength/TRACK_DATA_LENGTH;
                         ESP_LOGD(TAG, "targets: %d ", num_targets_ );
                         for( int pos = 0; pos < MAX_TARGETS; pos++ ){
@@ -466,13 +475,12 @@ namespace micradar {
                              
                             targets_[pos].height = two_byte_to_signed_int(buffer_data_[13 + pos *TRACK_DATA_LENGTH],
                                 buffer_data_[14 + pos * TRACK_DATA_LENGTH]);
-                            if(d ==  targets_[pos].distance)
-                                targets_[pos].velocity = 0;
-                            else
-                                if( d< targets_[pos].distance )
-                                    targets_[pos].velocity = 1;
-                            else
-                                targets_[pos].velocity = -1;
+                          
+                            time_delta = time_ - targets_[pos].time_us;
+                            targets_[pos].time_us = time_;
+                            vel =  1000000 * ( d - targets_[pos].distance ) / time_delta;
+                            targets_[pos].velocity = vel;
+                            
                             angle = atan2f(static_cast<float>(-px), static_cast<float>(py)) * (180.0f / std::numbers::pi_v<float>);
                             //two_byte_to_signed_int(buffer_data_[15 + pos *TRACK_DATA_LENGTH], 
                             //    buffer_data_[16 + pos * TRACK_DATA_LENGTH]);
