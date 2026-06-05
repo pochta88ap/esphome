@@ -7,10 +7,10 @@ namespace esphome::micradar {
 
 class TrackFrequencyNumber : public number::Number, public Parented<MicradarComponent> {
  public:
-  TrackFrequencyNumber(float_t frequency);
+  TrackFrequencyNumber() = default;
 
  protected:
-  float_t frequency_;
+  
   void control(float value) override;
 };
 
