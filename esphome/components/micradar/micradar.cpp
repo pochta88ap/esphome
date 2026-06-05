@@ -315,6 +315,9 @@ namespace micradar {
         const char *init_state;
         const char *human_presence;
         const char *movement_info;
+        struct timeval tv_now;
+        gettimeofday( &tv_now, null );
+        time_ = (int64_t)tv_now.tv_sec * 1000000L + (int64_t)tv_now.tv_usec;
     //    ESP_LOGD(TAG, "control word %02X command %02X", controlWord, commandWord);
         switch( controlWord ){
             case CTRL_SYSTEM_FUNCTIONS:
@@ -401,9 +404,11 @@ namespace micradar {
                     case CMD_PRESENCE_INFORMATION_QUERY:
                         if (this->target_binary_sensor_ != nullptr) {
                             this->target_binary_sensor_->publish_state(this->buffer_data_[SHIFT_DATA] != 0);
-                            if( this->buffer_data_[SHIFT_DATA] == 0 )
-                            for( uint8_t pos =0; pos < MAX_TARGETS; pos++){
+                            this->human_presence_ = this->buffer_data_[SHIFT_DATA];
+                            if( this->buffer_data_[SHIFT_DATA] == 0 ){
+                              for( uint8_t pos =0; pos < MAX_TARGETS; pos++){
                                 set_sensors_unknown( pos);
+                              }
                             }
                         }
                         human_presence = find_str( HUMAN_PRESENCE_BY_UINT, this->buffer_data_[SHIFT_DATA]);
@@ -444,6 +449,7 @@ namespace micradar {
                     //    break;
                     case CMD_TRACK_INFORMATION_QUERY:
                     {
+                        if( !human_presence ) break;
                         uint16_t px, py, d;
                         float angle = 0;
                         num_targets_ = dataLength/TRACK_DATA_LENGTH;
