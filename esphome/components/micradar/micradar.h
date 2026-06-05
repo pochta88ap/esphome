@@ -41,6 +41,7 @@ struct Target {
         int16_t height;
         int16_t velocity;
         int16_t distance;
+        uint64_t time_us;
     };
 
 
@@ -115,7 +116,8 @@ static constexpr uint8_t MAX_TARGETS = 3;
   std::string firmware_version_;
   uint8_t num_targets_;
   Target targets_[MAX_TARGETS];
-  uint64_t time;
+  uint64_t time_;
+  uint8_t human_presence_;
   
   uint8_t checkDigit_( uint8_t *buf, uint16_t len);
   void issue_data_( uint8_t control, uint8_t command, uint8_t *bytes, uint16_t len );
