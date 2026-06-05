@@ -316,7 +316,7 @@ namespace micradar {
         const char *human_presence;
         const char *movement_info;
         struct timeval tv_now;
-        gettimeofday( &tv_now, null );
+        gettimeofday( &tv_now, NULL );
         time_ = (int64_t)tv_now.tv_sec * 1000000L + (int64_t)tv_now.tv_usec;
     //    ESP_LOGD(TAG, "control word %02X command %02X", controlWord, commandWord);
         switch( controlWord ){
