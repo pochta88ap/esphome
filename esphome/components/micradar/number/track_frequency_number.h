@@ -5,7 +5,7 @@
 
 namespace esphome::micradar {
 
-class GateThresholdNumber : public number::Number, public Parented<MicradarComponent> {
+class TrackFrequencyNumber : public number::Number, public Parented<MicradarComponent> {
  public:
   TrackFrequencyNumber(float_t frequency);
 
