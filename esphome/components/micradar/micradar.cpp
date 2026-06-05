@@ -634,7 +634,7 @@ void MicradarComponent::set_velocity_sensor(uint8_t target, sensor::Sensor *s) {
 void MicradarComponent::set_angle_sensor(uint8_t target, sensor::Sensor *s) {
   this->angle_sensors_[target].set_sensor(s);
 }
-void Micradar::Component::set_track_frequency( float_t f ) {
+void MicradarComponent::set_track_frequency( float_t f ) {
     this->track_frequency = f;
 }
 
