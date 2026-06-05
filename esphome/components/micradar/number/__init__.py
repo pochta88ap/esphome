@@ -39,8 +39,10 @@ CONFIG_SCHEMA = cv.Schema(
 )
 
 async def to_code(config):
-    ld2410_component = await cg.get_variable(config[CONF_MICRADAR_ID])
-    if frequency_config := config.get(CONF_FREQUENCY):
+   micradar_component = await cg.get_variable(config[CONF_MICRADAR_ID])
+   if frequency_config := config.get(CONF_FREQUENCY):
         n = await number.new_number(
-            frequency_config, min_value=0.01, max_value=50, step=0.01
+            frequency_config, min_value=0.01, max_value=50.0, step=0.01
         )
+        await cg.register_parented(n, config[CONF_MICRADAR_ID])
+        cg.add(micradar_component.set_track_frequency_number(n))
