@@ -39,7 +39,7 @@ struct Target {
         int16_t x;
         int16_t y;
         int16_t height;
-        int16_t velocity;
+        float_t velocity;
         int16_t distance;
         uint64_t time_us;
     };
