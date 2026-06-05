@@ -405,7 +405,7 @@ namespace micradar {
                         if (this->target_binary_sensor_ != nullptr) {
                             this->target_binary_sensor_->publish_state(this->buffer_data_[SHIFT_DATA] != 0);
                            
-                            if( this->human_presence_ and this->buffer_data_[SHIFT_DATA] == 0 ){
+                            if( this->human_presence_ != 0  and this->buffer_data_[SHIFT_DATA] == 0 ){
                               for( uint8_t pos =0; pos < MAX_TARGETS; pos++){
                                 set_sensors_unknown( pos);
                               }
@@ -450,7 +450,7 @@ namespace micradar {
                     //    break;
                     case CMD_TRACK_INFORMATION_QUERY:
                     {
-                        if( !human_presence ) break;
+                        if( human_presence ==0 ) break;
                         uint16_t px, py, d;
                         float angle = 0, vel = 0;
                         uint64_t time_delta;
