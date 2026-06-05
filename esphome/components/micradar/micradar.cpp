@@ -489,7 +489,8 @@ namespace micradar {
                             SAFE_PUBLISH_SENSOR(this->y_coord_sensors_[targets_[pos].index-1], targets_[pos].y);
                             SAFE_PUBLISH_SENSOR(this->dist_sensors_[targets_[pos].index-1], targets_[pos].distance);
                             SAFE_PUBLISH_SENSOR(this->move_energy_sensors_[targets_[pos].index-1], targets_[pos].size); 
-                            SAFE_PUBLISH_SENSOR(this->angle_sensors_[targets_[pos].index-1], angle); 
+                            SAFE_PUBLISH_SENSOR(this->angle_sensors_[targets_[pos].index-1], angle);
+                            SAFE_PUBLISH_SENSOR(this->velocity_sensors_[targets_[pos].index-1], vel); 
                             ESP_LOGD(TAG, "Tracking info: Index: %d size: %d characteristics: %d x: %d \n y: %d height: %d velocity: %d distance: %d angle: %f", 
                                     targets_[pos].index, targets_[pos].size, targets_[pos].characteristics, 
                                     targets_[pos].x, targets_[pos].y, targets_[pos].height, targets_[pos].velocity, targets_[pos].distance, angle);
