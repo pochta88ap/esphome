@@ -16,7 +16,7 @@ void CopyNumber::setup() {
     this->publish_state(source_->state);
 }
 
-void MicradarNumber::dump_config() { LOG_NUMBER("", "Copy Number", this); }
+void MicradarNumber::dump_config() { LOG_NUMBER("", "Micradar Number", this); }
 
 void MicradarNumber::control(float value) {
   auto call2 = source_->make_call();
