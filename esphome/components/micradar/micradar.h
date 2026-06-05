@@ -104,6 +104,7 @@ static constexpr uint8_t MAX_TARGETS = 3;
   void set_angle_sensor(uint8_t target, sensor::Sensor *s);
   void set_move_energy_sensor(uint8_t target, sensor::Sensor *s);
   void set_sensors_unknown( uint8_t tgt );
+  void set_track_frequency( float_t f );
 #endif
  protected:
   void readline_(int readch);
@@ -118,10 +119,12 @@ static constexpr uint8_t MAX_TARGETS = 3;
   Target targets_[MAX_TARGETS];
   uint64_t time_;
   uint8_t human_presence_ = 0;
+  float_t track_frequency_;
   
   uint8_t checkDigit_( uint8_t *buf, uint16_t len);
   void issue_data_( uint8_t control, uint8_t command, uint8_t *bytes, uint16_t len );
   void handle_data_();
+  
   
   //issue command functions
   void issue_heartbit_package_query_();
