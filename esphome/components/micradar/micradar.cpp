@@ -318,12 +318,12 @@ namespace micradar {
         struct timeval tv_now;
         gettimeofday( &tv_now, NULL );
         uint64_t newtime = (int64_t)tv_now.tv_sec * 1000000L + (int64_t)tv_now.tv_usec;
-        uint64_t interval = newtime - time_;
+    //    uint64_t interval = newtime - time_;
         
-        if( interval > track_interval_) {
+     /*   if( interval > track_interval_) {
             time_ = newtime;
             this->issue_track_information_query_();
-        }
+        }*/
 
     //    ESP_LOGD(TAG, "control word %02X command %02X", controlWord, commandWord);
         switch( controlWord ){
