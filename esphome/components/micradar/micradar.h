@@ -120,7 +120,7 @@ static constexpr uint8_t MAX_TARGETS = 3;
   uint64_t time_;
   uint8_t human_presence_ = 0;
   uint8_t moving_target_ = 0;
-  uint64_t track_interval_ = 100000L;
+  uint64_t track_interval_ = 200000L;
  
 
   uint8_t checkDigit_( uint8_t *buf, uint16_t len);
