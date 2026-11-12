@@ -326,7 +326,7 @@ namespace micradar {
         const char *init_state;
         const char *human_presence;
         const char *movement_info;
-        
+        uint64_t time = (int64_t)tv_now.tv_sec * 1000000L + (int64_t)tv_now.tv_usec;
 
         ESP_LOGD(TAG, "control word %02X command %02X", controlWord, commandWord);
         switch( controlWord ){
@@ -486,8 +486,8 @@ namespace micradar {
                             targets_[pos].height = two_byte_to_signed_int(buffer_data_[13 + pos *TRACK_DATA_LENGTH],
                                 buffer_data_[14 + pos * TRACK_DATA_LENGTH]);
                           
-                            time_delta = newtime - targets_[pos].time_us;
-                            targets_[pos].time_us = newtime;
+                            time_delta = time - targets_[pos].time_us;
+                            targets_[pos].time_us = time;
                             vel =  10000.0L * ( static_cast<float>(targets_[pos].distance) - static_cast<float>(d) ) / time_delta;
                             targets_[pos].velocity = vel;
                             
