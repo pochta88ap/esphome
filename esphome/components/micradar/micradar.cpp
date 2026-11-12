@@ -465,7 +465,7 @@ namespace micradar {
                     //    break;
                     case CMD_TRACK_INFORMATION_QUERY:
                     {
-                        if( human_presence_ ==0 ) break;
+                        if( moving_target_ ==0 ) break;
                         uint16_t px, py, d;
                         float angle = 0, vel = 0;
                         uint64_t time_delta;
