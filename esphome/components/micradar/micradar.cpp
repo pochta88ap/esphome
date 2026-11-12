@@ -264,7 +264,7 @@ namespace micradar {
         
             if( interval > track_interval_) {
                 time_ = newtime;
-                this->issue_track_information_query_();
+             //   this->issue_track_information_query_();
             }
         }   
     }
