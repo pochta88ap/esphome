@@ -241,19 +241,30 @@ namespace micradar {
 
     void MicradarComponent::loop() {
        // Read all available bytes in batches to reduce UART call overhead.
-  size_t avail = this->available();
-  uint8_t buf[MAX_LINE_LENGTH];
-  while (avail > 0) {
-    size_t to_read = std::min(avail, sizeof(buf));
-    if (!this->read_array(buf, to_read)) {
-      break;
-    }
-    avail -= to_read;
+        size_t avail = this->available();
+        uint8_t buf[MAX_LINE_LENGTH];
+        while (avail > 0) {
+            size_t to_read = std::min(avail, sizeof(buf));
+            if (!this->read_array(buf, to_read)) {
+                break;
+            }
+            avail -= to_read;
 
-    for (size_t i = 0; i < to_read; i++) {
-      this->readline_(buf[i]);
-    }
-  }
+            for (size_t i = 0; i < to_read; i++) {
+                this->readline_(buf[i]);
+            }
+        }
+        struct timeval tv_now;
+        gettimeofday( &tv_now, NULL );
+        uint64_t newtime = (int64_t)tv_now.tv_sec * 1000000L + (int64_t)tv_now.tv_usec;
+// query track info
+        uint64_t interval = newtime - time_;
+        
+        if( interval > track_interval_) {
+            time_ = newtime;
+            this->issue_track_information_query_();
+            
+        }   
     }
 
     void MicradarComponent::readline_(int readch ) {
@@ -315,17 +326,7 @@ namespace micradar {
         const char *init_state;
         const char *human_presence;
         const char *movement_info;
-        struct timeval tv_now;
-        gettimeofday( &tv_now, NULL );
-        uint64_t newtime = (int64_t)tv_now.tv_sec * 1000000L + (int64_t)tv_now.tv_usec;
-// query track info
-        uint64_t interval = newtime - time_;
         
-        if( interval > track_interval_) {
-            time_ = newtime;
-            this->issue_track_information_query_();
-            
-        }
 
         ESP_LOGD(TAG, "control word %02X command %02X", controlWord, commandWord);
         switch( controlWord ){
