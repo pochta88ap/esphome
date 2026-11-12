@@ -431,7 +431,7 @@ namespace micradar {
                         break;
                     case CMD_MOVEMENT_INFORMATION_REPORT:
                     case CMD_MOVEMENT_INFORMATION_QUERY:
-                        moving_target_ = this->moving_target_binary_sensor_->publish_state(this->buffer_data_[SHIFT_DATA] == 0x02;
+                        moving_target_ = this->buffer_data_[SHIFT_DATA] == 0x02;
                         if (this->moving_target_binary_sensor_ != nullptr) {
                             this->moving_target_binary_sensor_->publish_state(this->buffer_data_[SHIFT_DATA] == 0x02);
                         }
