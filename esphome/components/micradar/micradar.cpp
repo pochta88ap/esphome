@@ -324,6 +324,7 @@ namespace micradar {
         if( interval > track_interval_) {
             time_ = newtime;
             this->issue_track_information_query_();
+            
         }
 
         ESP_LOGD(TAG, "control word %02X command %02X", controlWord, commandWord);
@@ -614,6 +615,7 @@ namespace micradar {
     }
     void MicradarComponent::issue_track_information_query_(){
         uint8_t buf = 0;
+        ESP_LOGD(TAG, "send track query " );
         this->issue_data_( CTRL_TRACK_FUNCTION, CMD_TRACK_INFORMATION_QUERY, &buf, sizeof( buf) );
     }
    
