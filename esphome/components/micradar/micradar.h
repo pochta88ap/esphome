@@ -119,6 +119,7 @@ static constexpr uint8_t MAX_TARGETS = 3;
   Target targets_[MAX_TARGETS];
   uint64_t time_;
   uint8_t human_presence_ = 0;
+  uint8_t moving_target_ = 0;
   uint64_t track_interval_ = 100000L;
  
 
